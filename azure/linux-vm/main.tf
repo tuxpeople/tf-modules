@@ -18,14 +18,14 @@ locals {
   } : {}
 }
 
-resource "azurerm_linux_virtual_machine" "this" {
+resource "azurerm_linux_virtual_machine" "main" {
   count                 = var.instances_count
   name                  = "vm-${local.clean_name}${(count.index + 1)}"
   location              = var.location
   resource_group_name   = var.resource_group_name
   size                  = var.vmsize_list[lower(var.vmsize_name)]["size"]
   admin_username        = var.vm_username
-  network_interface_ids = [element(concat(azurerm_network_interface.this.*.id, [""]), count.index)]
+  network_interface_ids = [element(concat(azurerm_network_interface.main.*.id, [""]), count.index)]
   custom_data = var.cloud_init_file != "" ? base64encode(templatefile(var.cloud_init_file, {
     FQDN = (
       (var.custom_fqdn != "") ?
@@ -64,7 +64,7 @@ resource "azurerm_linux_virtual_machine" "this" {
   }
 }
 
-resource "azurerm_network_interface" "this" {
+resource "azurerm_network_interface" "main" {
   count               = var.instances_count
   name                = "vm-${local.clean_name}${(count.index + 1)}_nic"
   location            = var.location
@@ -74,7 +74,7 @@ resource "azurerm_network_interface" "this" {
     name                          = "internal"
     subnet_id                     = var.subnet
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = var.enable_public_ip_address == true ? element(concat(azurerm_public_ip.this.*.id, [""]), count.index) : null
+    public_ip_address_id          = var.enable_public_ip_address == true ? element(concat(azurerm_public_ip.main.*.id, [""]), count.index) : null
   }
   tags = merge(local.default_tags, var.extra_tags)
   lifecycle {
@@ -84,7 +84,7 @@ resource "azurerm_network_interface" "this" {
   }
 }
 
-resource "azurerm_public_ip" "this" {
+resource "azurerm_public_ip" "main" {
   count               = var.enable_public_ip_address == true ? var.instances_count : 0
   name                = "vm-${local.clean_name}${(count.index + 1)}_pip"
   resource_group_name = var.resource_group_name
@@ -110,7 +110,7 @@ resource "azurerm_public_ip" "this" {
   }
 }
 
-resource "azurerm_network_security_group" "this" {
+resource "azurerm_network_security_group" "main" {
   name                = "vm-${local.clean_name}_nsg"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -136,20 +136,20 @@ resource "azurerm_network_security_rule" "nsg_rule" {
   destination_address_prefix  = "*"
   description                 = "Inbound_Port_${each.value.security_rule.destination_port_range}"
   resource_group_name         = var.resource_group_name
-  network_security_group_name = azurerm_network_security_group.this.name
-  depends_on                  = [azurerm_network_security_group.this]
+  network_security_group_name = azurerm_network_security_group.main.name
+  depends_on                  = [azurerm_network_security_group.main]
 }
 
 
-resource "azurerm_network_interface_security_group_association" "this" {
+resource "azurerm_network_interface_security_group_association" "main" {
   count                     = var.instances_count
-  network_interface_id      = element(concat(azurerm_network_interface.this.*.id, [""]), count.index)
-  network_security_group_id = azurerm_network_security_group.this.id
+  network_interface_id      = element(concat(azurerm_network_interface.main.*.id, [""]), count.index)
+  network_security_group_id = azurerm_network_security_group.main.id
 }
 
-resource "azurerm_dev_test_global_vm_shutdown_schedule" "this" {
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "main" {
   count              = var.instances_count
-  virtual_machine_id = element(concat(azurerm_linux_virtual_machine.this.*.id, [""]), count.index)
+  virtual_machine_id = element(concat(azurerm_linux_virtual_machine.main.*.id, [""]), count.index)
   location           = var.location
   enabled            = var.enable_vm_shutdown
 
