@@ -1,0 +1,169 @@
+resource "random_string" "unique_suffix" {
+  upper   = false
+  special = false
+  length  = 5
+}
+
+locals {
+  clean_name = substr(lower(replace(var.name, "/[[:^alnum:]]/", "")), 0, 60)
+
+  nsg_inbound_rules = { for idx, security_rule in var.nsg_inbound_rules : security_rule.name => {
+    idx : idx,
+    security_rule : security_rule,
+    }
+  }
+
+  default_tags = var.default_tags_enabled ? {
+    environment = var.environment
+  } : {}
+}
+
+resource "azurerm_linux_virtual_machine" "this" {
+  count                 = var.instances_count
+  name                  = "vm-${local.clean_name}${(count.index + 1)}"
+  location              = var.location
+  resource_group_name   = var.resource_group_name
+  size                  = var.vmsize_list[lower(var.vmsize_name)]["size"]
+  admin_username        = var.vm_username
+  network_interface_ids = [element(concat(azurerm_network_interface.this.*.id, [""]), count.index)]
+  custom_data = var.cloud_init_file != "" ? base64encode(templatefile(var.cloud_init_file, {
+    FQDN = (
+      (var.custom_fqdn != "") ?
+      var.custom_fqdn :
+      (var.dns_name != "" ?
+        "${var.dns_name}.${var.location}.cloudapp.azure.com" :
+      "${local.clean_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${var.location}.cloudapp.azure.com")
+    ),
+    hostname = "vm-${local.clean_name}${(count.index + 1)}"
+  })) : null
+
+  admin_ssh_key {
+    username   = var.vm_username
+    public_key = file(var.ssh_public_keyfile)
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = var.linux_distribution_list[lower(var.linux_distribution_name)]["publisher"]
+    offer     = var.linux_distribution_list[lower(var.linux_distribution_name)]["offer"]
+    sku       = var.linux_distribution_list[lower(var.linux_distribution_name)]["sku"]
+    version   = var.linux_distribution_list[lower(var.linux_distribution_name)]["version"]
+  }
+
+  tags = merge(local.default_tags, var.extra_tags)
+
+  lifecycle {
+    ignore_changes = [
+      tags,
+      identity,
+    ]
+  }
+}
+
+resource "azurerm_network_interface" "this" {
+  count               = var.instances_count
+  name                = "vm-${local.clean_name}${(count.index + 1)}_nic"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = var.subnet
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = var.enable_public_ip_address == true ? element(concat(azurerm_public_ip.this.*.id, [""]), count.index) : null
+  }
+  tags = merge(local.default_tags, var.extra_tags)
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
+}
+
+resource "azurerm_public_ip" "this" {
+  count               = var.enable_public_ip_address == true ? var.instances_count : 0
+  name                = "vm-${local.clean_name}${(count.index + 1)}_pip"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  allocation_method   = "Dynamic"
+  domain_name_label = (
+    (var.dns_name != "") ?
+    var.dns_name : "${local.clean_name}${(count.index + 1)}-${random_string.unique_suffix.result}"
+  )
+  reverse_fqdn = (
+    (var.custom_fqdn != "") ?
+    var.custom_fqdn :
+    (var.dns_name != "" ?
+    "${var.dns_name}.${var.location}.cloudapp.azure.com" : "${local.clean_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${var.location}.cloudapp.azure.com")
+  )
+
+  tags = merge(local.default_tags, var.extra_tags)
+  lifecycle {
+    ignore_changes = [
+      tags,
+      ip_tags,
+    ]
+  }
+}
+
+resource "azurerm_network_security_group" "this" {
+  name                = "vm-${local.clean_name}_nsg"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  tags = merge(local.default_tags, var.extra_tags)
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
+}
+
+resource "azurerm_network_security_rule" "nsg_rule" {
+  for_each                    = { for k, v in local.nsg_inbound_rules : k => v if k != null }
+  name                        = each.key
+  priority                    = 100 * (each.value.idx + 1)
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = each.value.security_rule.destination_port_range
+  source_address_prefix       = each.value.security_rule.source_address_prefix
+  destination_address_prefix  = "*"
+  description                 = "Inbound_Port_${each.value.security_rule.destination_port_range}"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.this.name
+  depends_on                  = [azurerm_network_security_group.this]
+}
+
+
+resource "azurerm_network_interface_security_group_association" "this" {
+  count                     = var.instances_count
+  network_interface_id      = element(concat(azurerm_network_interface.this.*.id, [""]), count.index)
+  network_security_group_id = azurerm_network_security_group.this.id
+}
+
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "this" {
+  count              = var.instances_count
+  virtual_machine_id = element(concat(azurerm_linux_virtual_machine.this.*.id, [""]), count.index)
+  location           = var.location
+  enabled            = var.enable_vm_shutdown
+
+  daily_recurrence_time = var.shutdown_time
+  timezone              = var.timezone
+
+
+  notification_settings {
+    enabled = false
+  }
+  tags = merge(local.default_tags, var.extra_tags)
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
+}
