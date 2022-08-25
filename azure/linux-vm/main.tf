@@ -51,7 +51,7 @@ resource "azurerm_linux_virtual_machine" "main" {
     version   = var.linux_distribution_list[lower(var.linux_distribution_name)]["version"]
   }
 
-  tags = merge(local.default_tags, var.extra_tags, var.enable_public_ip_address == true ? { FQDN = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${local.host_domain}"}) : null
+  tags = merge(local.default_tags, var.extra_tags, var.enable_public_ip_address == true ? { FQDN = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${local.host_domain}" } : null)
 
   lifecycle {
     ignore_changes = [
