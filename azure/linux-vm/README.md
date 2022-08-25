@@ -36,7 +36,7 @@ No modules.
 | <a name="input_dns_domain"></a> [dns\_domain](#input\_dns\_domain) | Domain part of the FQDN. Will be appended to <dns\_name>. (Default: <location>.cloudapp.azure.com) | `string` | `""` | no |
 | <a name="input_dns_name"></a> [dns\_name](#input\_dns\_name) | Hostname for the FQDN, needs to be unique for the whole domain and will be appended with a number depending on how many VMs beeing created. (Default: VM name with number and a random suffix) | `string` | `""` | no |
 | <a name="input_enable_public_ip_address"></a> [enable\_public\_ip\_address](#input\_enable\_public\_ip\_address) | Do this VMs need a public IP address (Default: false) | `bool` | `false` | no |
-| <a name="input_enable_vm_shutdown"></a> [enable\_vm\_shutdown](#input\_enable\_vm\_shutdown) | Should auto-shutdown be enabled for this VMs (Default: false) | `string` | `"false"` | no |
+| <a name="input_enable_vm_shutdown"></a> [enable\_vm\_shutdown](#input\_enable\_vm\_shutdown) | Should auto-shutdown be enabled for this VMs (Default: false) | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment of the resources (Default: development). | `string` | `"development"` | no |
 | <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Additional tags to associate with your VMs. | `map(string)` | `{}` | no |
 | <a name="input_instances_count"></a> [instances\_count](#input\_instances\_count) | How many of those VM instances? (Default: 1) | `string` | `"1"` | no |

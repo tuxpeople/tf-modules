@@ -66,7 +66,7 @@ variable "instances_count" {
   description = "How many of those VM instances? (Default: 1)"
 }
 variable "enable_vm_shutdown" {
-  default     = "false"
+  default     = false
   description = "Should auto-shutdown be enabled for this VMs (Default: false)"
 }
 variable "shutdown_time" {
