@@ -53,12 +53,12 @@ variable "ssh_private_keyfile" {
 
 variable "dns_name" {
   default     = ""
-  description = "Hostname for the Azure FQDN, needs to be unique for the whole domain. (Default: VM name and a random suffix)"
+  description = "Hostname for the FQDN, needs to be unique for the whole domain and will be appended with a number depending on how many VMs beeing created. (Default: VM name with number and a random suffix)"
 }
 
-variable "custom_fqdn" {
+variable "dns_domain" {
   default     = ""
-  description = "Full FQDN for public IP. Will be set as reverse PTR. If empty, PTR defaults to Azure forward entry."
+  description = "Domain part of the FQDN. Will be appended to <dns_name>. (Default: <location>.cloudapp.azure.com)"
 }
 
 variable "instances_count" {
