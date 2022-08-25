@@ -26,7 +26,7 @@ output "vm_details" {
       name                = vm.name
       public_ip_address   = vm.public_ip_address
       private_ip_address  = vm.private_ip_address
-      fqdn                = vm.name.tags[FQDN]
+      fqdn                = vm.name.tags["FQDN"]
       location            = vm.location
       resource_group_name = vm.resource_group_name
     }
