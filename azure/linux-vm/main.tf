@@ -31,7 +31,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   network_interface_ids = [element(concat(azurerm_network_interface.main.*.id, [""]), count.index)]
   custom_data = var.cloud_init_file != "" ? base64encode(templatefile(var.cloud_init_file, {
     FQDN     = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${local.host_domain}",
-    hostname = "vm-${local.host_name}${(count.index + 1)}"
+    HOSTNAME = "vm-${local.host_name}${(count.index + 1)}"
   })) : null
 
   admin_ssh_key {
