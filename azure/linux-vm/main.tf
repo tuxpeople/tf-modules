@@ -29,10 +29,10 @@ resource "azurerm_linux_virtual_machine" "main" {
   size                  = var.vmsize_list[lower(var.vmsize_name)]["size"]
   admin_username        = var.vm_username
   network_interface_ids = [element(concat(azurerm_network_interface.main.*.id, [""]), count.index)]
-  custom_data = var.cloud_init_file != "" ? base64encode(templatefile(var.cloud_init_file, {
+  custom_data = var.custom_data != "" ? var.custom_data : (var.cloud_init_file != "" ? base64encode(templatefile(var.cloud_init_file, {
     FQDN     = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${local.host_domain}",
     HOSTNAME = "vm-${local.host_name}${(count.index + 1)}"
-  })) : null
+  })) : null)
 
   admin_ssh_key {
     username   = var.vm_username
