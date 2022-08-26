@@ -14,11 +14,11 @@ output "resource_group_location" {
 }
 
 output "virtual_network_name" {
-  value       = azurerm_virtual_network.main.name
+  value       = azurerm_virtual_network.main[0].name
   description = "Virtual network name"
 }
 
 output "virtual_network_id" {
-  value       = azurerm_virtual_network.main.id
+  value       = azurerm_virtual_network.main[0].id
   description = "Virtual network generated id"
 }
