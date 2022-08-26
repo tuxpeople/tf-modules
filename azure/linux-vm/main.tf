@@ -22,7 +22,7 @@ locals {
 
 resource "azurerm_linux_virtual_machine" "main" {
   count                 = var.instances_count
-  name                  = var.instances_count == "1" ? "vm-${clean_name}" : "vm-${clean_name}${(count.index + 1)}"
+  name                  = var.instances_count == "1" ? "vm-${local.clean_name}" : "vm-${local.clean_name}${(count.index + 1)}"
   location              = var.location
   resource_group_name   = var.resource_group_name
   size                  = var.vmsize_list[lower(var.vmsize_name)]["size"]
@@ -30,7 +30,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   network_interface_ids = [element(concat(azurerm_network_interface.main.*.id, [""]), count.index)]
   custom_data = var.custom_data != "" ? base64encode(var.custom_data) : (var.cloud_init_file != "" ? base64encode(templatefile(var.cloud_init_file, var.custom_data_vars != "" ? var.custom_data_vars : ({
     FQDN     = (var.instances_count == "1" ? "${local.host_name}${local.host_domain}" : "${local.host_name}${(count.index + 1)}${local.host_domain}"),
-    HOSTNAME = (var.instances_count == "1" ? "vm-${clean_name}" : "vm-${clean_name}${(count.index + 1)}")
+    HOSTNAME = (var.instances_count == "1" ? "vm-${local.clean_name}" : "vm-${local.clean_name}${(count.index + 1)}")
   }))) : null)
 
   admin_ssh_key {
@@ -62,7 +62,7 @@ resource "azurerm_linux_virtual_machine" "main" {
 
 resource "azurerm_network_interface" "main" {
   count               = var.instances_count
-  name                = var.instances_count == "1" ? "vm-${clean_name}_nic" : "vm-${clean_name}${(count.index + 1)}_nic"
+  name                = var.instances_count == "1" ? "vm-${local.clean_name}_nic" : "vm-${local.clean_name}${(count.index + 1)}_nic"
   location            = var.location
   resource_group_name = var.resource_group_name
 
@@ -82,7 +82,7 @@ resource "azurerm_network_interface" "main" {
 
 resource "azurerm_public_ip" "main" {
   count               = var.enable_public_ip_address == true ? var.instances_count : 0
-  name                = var.instances_count == "1" ? "vm-${clean_name}_pip" : "vm-${clean_name}${(count.index + 1)}_pip"
+  name                = var.instances_count == "1" ? "vm-${local.clean_name}_pip" : "vm-${local.clean_name}${(count.index + 1)}_pip"
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Dynamic"
