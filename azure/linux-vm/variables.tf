@@ -28,6 +28,11 @@ variable "custom_data" {
   default     = ""
   description = "Supply the prepared cloud-init data for the VM in plain text. If set <cloud_init_file> will be ignored. (optional)"
 }
+variable "enable_reverse_fqdn" {
+  default     = false
+  type        = bool
+  description = "Do this VMs public IP addresses need a reverse FQDN (Default: false)"
+}
 variable "custom_data_vars" {
   type        = map(string)
   default     = {}
