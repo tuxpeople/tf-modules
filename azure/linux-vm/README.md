@@ -33,6 +33,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_cloud_init_file"></a> [cloud\_init\_file](#input\_cloud\_init\_file) | Path to cloud-init file for the VMs. <FQDN> and <HOSTNAME> can be used as variables and will be replaced. (optional) | `string` | `""` | no |
 | <a name="input_custom_data"></a> [custom\_data](#input\_custom\_data) | Supply the prepared cloud-init data for the VM in plain text. If set <cloud\_init\_file> will be ignored. (optional) | `string` | `""` | no |
+| <a name="input_custom_data_vars"></a> [custom\_data\_vars](#input\_custom\_data\_vars) | Additional variables to replace in <cloud\_init\_file>. <FQDN> and <HOSTNAME> are already defined. (optional) | `map(string)` | `{}` | no |
 | <a name="input_default_tags_enabled"></a> [default\_tags\_enabled](#input\_default\_tags\_enabled) | Option to enable or disable default tags. | `bool` | `true` | no |
 | <a name="input_dns_domain"></a> [dns\_domain](#input\_dns\_domain) | Domain part of the FQDN. Will be appended to <dns\_name>. (Default: <location>.cloudapp.azure.com) | `string` | `""` | no |
 | <a name="input_dns_name"></a> [dns\_name](#input\_dns\_name) | Hostname for the FQDN, needs to be unique for the whole domain and will be appended with a number depending on how many VMs beeing created. (Default: VM name with number and a random suffix) | `string` | `""` | no |
