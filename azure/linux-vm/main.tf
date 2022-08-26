@@ -86,8 +86,8 @@ resource "azurerm_public_ip" "main" {
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Dynamic"
-  domain_name_label   = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}"
-  reverse_fqdn        = "${local.host_name}${(count.index + 1)}-${local.host_domain}"
+  domain_name_label   = var.instances_count != "1" ? "${local.host_name}-${random_string.unique_suffix.result}" : "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}"
+  reverse_fqdn        = var.instances_count != "1" ? "${local.host_name}-${local.host_domain}" : "${local.host_name}${(count.index + 1)}-${local.host_domain}"
 
   tags = merge(local.default_tags, var.extra_tags)
   lifecycle {
