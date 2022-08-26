@@ -32,7 +32,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   custom_data = var.custom_data != "" ? base64encode(var.custom_data) : (var.cloud_init_file != "" ? base64encode(templatefile(var.cloud_init_file, {
     FQDN     = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${local.host_domain}",
     HOSTNAME = "vm-${local.host_name}${(count.index + 1)}",
-    var.custom_data_vars != "" ? var.custom_data_vars : null
+    (var.custom_data_vars != "" ? var.custom_data_vars : null))
   })) : null)
 
   admin_ssh_key {
