@@ -7,7 +7,7 @@ resource "random_string" "unique_suffix" {
 locals {
   clean_name = substr(lower(replace(var.name, "/[[:^alnum:]]/", "")), 0, 60)
 
-  host_name   = var.dns_name != "" ? lower(replace(var.dns_name, "/[[:^alnum:]]/", "")) : var.name
+  host_name   = var.dns_name != "" ? lower(var.dns_name) : var.name
   host_domain = var.dns_domain != "" ? ".${lower(var.dns_domain)}" : "-${random_string.unique_suffix.result}.${var.location}.cloudapp.azure.com"
   nsg_inbound_rules = { for idx, security_rule in var.nsg_inbound_rules : security_rule.name => {
     idx : idx,
@@ -86,7 +86,7 @@ resource "azurerm_public_ip" "main" {
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Dynamic"
-  domain_name_label   = var.instances_count == "1" ? "${local.host_name}-${random_string.unique_suffix.result}" : "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}"
+  domain_name_label   = var.instances_count == "1" ? "${local.host_name}" : "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}"
   reverse_fqdn        = var.enable_reverse_fqdn == true ? (var.instances_count == "1" ? "${local.host_name}${local.host_domain}" : "${local.host_name}${(count.index + 1)}${local.host_domain}") : null
 
   tags = merge(local.default_tags, var.extra_tags)
