@@ -8,7 +8,7 @@ locals {
   clean_name = substr(lower(replace(var.name, "/[[:^alnum:]]/", "")), 0, 60)
 
   host_name   = var.dns_name != "" ? lower(replace(var.dns_name, "/[[:^alnum:]]/", "")) : local.clean_name
-  host_domain = var.dns_domain != "" ? lower(var.dns_domain) : "${random_string.unique_suffix.result}.${var.location}.cloudapp.azure.com"
+  host_domain = var.dns_domain != "" ? ".${lower(var.dns_domain)}" : "${random_string.unique_suffix.result}.${var.location}.cloudapp.azure.com"
   nsg_inbound_rules = { for idx, security_rule in var.nsg_inbound_rules : security_rule.name => {
     idx : idx,
     security_rule : security_rule,
