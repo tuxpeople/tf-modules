@@ -25,7 +25,7 @@ variable "cloud_init_file" {
   description = "Path to cloud-init file for the VMs. <FQDN> and <HOSTNAME> can be used as variables and will be replaced. (optional)"
 }
 variable "custom_data" {
-  default = ""
+  default     = ""
   description = "Supply the prepared cloud-init data for the VM in plain text. If set <cloud_init_file> will be ignored. (optional)"
 }
 variable "vm_username" {
