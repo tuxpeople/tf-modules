@@ -8,8 +8,7 @@ locals {
   clean_name = substr(lower(replace(var.name, "/[[:^alnum:]]/", "")), 0, 60)
 
   host_name   = var.dns_name != "" ? lower(replace(var.dns_name, "/[[:^alnum:]]/", "")) : local.clean_name
-  host_domain = var.dns_domain != "" ? lower(var.dns_domain) : "${var.location}.cloudapp.azure.com"
-
+  host_domain = var.dns_domain != "" ? lower(var.dns_domain) : "${random_string.unique_suffix.result}.${var.location}.cloudapp.azure.com"
   nsg_inbound_rules = { for idx, security_rule in var.nsg_inbound_rules : security_rule.name => {
     idx : idx,
     security_rule : security_rule,
@@ -23,15 +22,15 @@ locals {
 
 resource "azurerm_linux_virtual_machine" "main" {
   count                 = var.instances_count
-  name                  = "vm-${local.host_name}${(count.index + 1)}"
+  name                  = var.instances_count != "1" ? "vm-${local.host_name}" : "vm-${local.host_name}${(count.index + 1)}"
   location              = var.location
   resource_group_name   = var.resource_group_name
   size                  = var.vmsize_list[lower(var.vmsize_name)]["size"]
   admin_username        = var.vm_username
   network_interface_ids = [element(concat(azurerm_network_interface.main.*.id, [""]), count.index)]
   custom_data = var.custom_data != "" ? base64encode(var.custom_data) : (var.cloud_init_file != "" ? base64encode(templatefile(var.cloud_init_file, var.custom_data_vars != "" ? var.custom_data_vars : ({
-    FQDN     = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${local.host_domain}",
-    HOSTNAME = "vm-${local.host_name}${(count.index + 1)}"
+    FQDN     = (var.instances_count != "1" ? "${local.host_name}-${local.host_domain}" : "${local.host_name}${(count.index + 1)}-${local.host_domain}"),
+    HOSTNAME = (var.instances_count != "1" ? "vm-${local.host_name}" : "vm-${local.host_name}${(count.index + 1)}")
   }))) : null)
 
   admin_ssh_key {
@@ -51,7 +50,7 @@ resource "azurerm_linux_virtual_machine" "main" {
     version   = var.linux_distribution_list[lower(var.linux_distribution_name)]["version"]
   }
 
-  tags = merge(local.default_tags, var.extra_tags, var.enable_public_ip_address == true ? { FQDN = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${local.host_domain}" } : null)
+  tags = merge(local.default_tags, var.extra_tags, var.enable_public_ip_address == true ? { FQDN = "${local.host_name}${(count.index + 1)}-${local.host_domain}" } : null)
 
   lifecycle {
     ignore_changes = [
@@ -63,7 +62,7 @@ resource "azurerm_linux_virtual_machine" "main" {
 
 resource "azurerm_network_interface" "main" {
   count               = var.instances_count
-  name                = "vm-${local.host_name}${(count.index + 1)}_nic"
+  name                = var.instances_count != "1" ? "vm-${local.host_name}_nic" : "vm-${local.host_name}${(count.index + 1)}_nic"
   location            = var.location
   resource_group_name = var.resource_group_name
 
@@ -83,12 +82,12 @@ resource "azurerm_network_interface" "main" {
 
 resource "azurerm_public_ip" "main" {
   count               = var.enable_public_ip_address == true ? var.instances_count : 0
-  name                = "vm-${local.host_name}${(count.index + 1)}_pip"
+  name                = var.instances_count != "1" ? "vm-${local.host_name}_pip" : "vm-${local.host_name}${(count.index + 1)}_pip"
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Dynamic"
   domain_name_label   = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}"
-  reverse_fqdn        = "${local.host_name}${(count.index + 1)}-${random_string.unique_suffix.result}.${local.host_domain}"
+  reverse_fqdn        = "${local.host_name}${(count.index + 1)}-${local.host_domain}"
 
   tags = merge(local.default_tags, var.extra_tags)
   lifecycle {
