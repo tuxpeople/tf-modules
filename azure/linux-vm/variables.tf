@@ -28,6 +28,11 @@ variable "custom_data" {
   default     = ""
   description = "Supply the prepared cloud-init data for the VM in plain text. If set <cloud_init_file> will be ignored. (optional)"
 }
+variable "custom_data_vars" {
+  type        = map(string)
+  default     = {}
+  description = "Additional variables to replace in <cloud_init_file>. <FQDN> and <HOSTNAME> are already defined. (optional)"
+}
 variable "vm_username" {
   default     = "adminuser"
   description = "Adminuser of the VMs (Default: adminuser)"
