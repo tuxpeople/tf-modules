@@ -26,7 +26,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_address_space"></a> [address\_space](#input\_address\_space) | Adress space for the network | `any` | n/a | yes |
+| <a name="input_address_space"></a> [address\_space](#input\_address\_space) | Adress space for the network | `string` | `""` | no |
 | <a name="input_enable_pets"></a> [enable\_pets](#input\_enable\_pets) | n/a | `string` | `"false"` | no |
 | <a name="input_location"></a> [location](#input\_location) | Location of the resources (Default: eastus). | `string` | `"eastus"` | no |
 | <a name="input_project"></a> [project](#input\_project) | Name for that project | `any` | n/a | yes |

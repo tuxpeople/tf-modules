@@ -17,6 +17,6 @@ variable "project" {
 }
 
 variable "address_space" {
-  default = ""
+  default     = ""
   description = "Adress space for the network"
 }
