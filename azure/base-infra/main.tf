@@ -9,6 +9,7 @@ resource "azurerm_resource_group" "main" {
 }
 
 resource "azurerm_virtual_network" "main" {
+  count               = var.address_space != "" ? 1 : 0
   name                = "${var.project}-network"
   address_space       = var.address_space
   location            = var.location
