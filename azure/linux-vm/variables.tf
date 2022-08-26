@@ -31,7 +31,7 @@ variable "custom_data" {
 variable "custom_data_vars" {
   type        = map(string)
   default     = {}
-  description = "Additional variables to replace in <cloud_init_file>. <FQDN> and <HOSTNAME> are already defined. (optional)"
+  description = "Custom variables to replace in <cloud_init_file> to replace <FQDN> and <HOSTNAME> with. (optional)"
 }
 variable "vm_username" {
   default     = "adminuser"
