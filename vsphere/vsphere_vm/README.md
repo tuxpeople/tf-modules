@@ -32,7 +32,7 @@ No modules.
 | <a name="input_datacenter"></a> [datacenter](#input\_datacenter) | Datacenter where the VMs should be placed (Defaults to: SKY) | `string` | `"SKY"` | no |
 | <a name="input_datastore"></a> [datastore](#input\_datastore) | Datastore where the VMs should be placed (must exist) | `string` | n/a | yes |
 | <a name="input_disksize"></a> [disksize](#input\_disksize) | Disksize in GB | `number` | n/a | yes |
-| <a name="input_eagerly_scrub"></a> [eagerly\_scrub](#input\_eagerly\_scrub) | Eagerly scrub disk (Defaults to: true) | `bool` | `true` | no |
+| <a name="input_eagerly_scrub"></a> [eagerly\_scrub](#input\_eagerly\_scrub) | Eagerly scrub disk (Defaults to: false) | `bool` | `false` | no |
 | <a name="input_folder"></a> [folder](#input\_folder) | Folder where the VMs should be placed (must exist) | `string` | n/a | yes |
 | <a name="input_guest_id"></a> [guest\_id](#input\_guest\_id) | guest\_id of the VM (Defaults to: ubuntu64Guest) | `string` | `"ubuntu64Guest"` | no |
 | <a name="input_hostname"></a> [hostname](#input\_hostname) | Hostname of the VM, will be appended with a number depending on how many VMs beeing created. | `string` | n/a | yes |
@@ -40,7 +40,7 @@ No modules.
 | <a name="input_network"></a> [network](#input\_network) | Network which the VM should be connected to (must exist) | `string` | n/a | yes |
 | <a name="input_ssh_public_keyfile"></a> [ssh\_public\_keyfile](#input\_ssh\_public\_keyfile) | SSH public keyfile for the VMs (Default: ~/.ssh/id\_rsa.pub) | `string` | `"~/.ssh/id_rsa.pub"` | no |
 | <a name="input_template"></a> [template](#input\_template) | Which template to clone. (Defaults to: focal-server-cloudimg-amd64) | `string` | `"focal-server-cloudimg-amd64"` | no |
-| <a name="input_thin_provisioned"></a> [thin\_provisioned](#input\_thin\_provisioned) | How many vCPU | `string` | n/a | yes |
+| <a name="input_thin_provisioned"></a> [thin\_provisioned](#input\_thin\_provisioned) | Thinprovision the disk (Defaults to: true) | `bool` | `true` | no |
 | <a name="input_user_data"></a> [user\_data](#input\_user\_data) | Supply a special cloud-init file. If empty, the module's default will be used. | `string` | `""` | no |
 | <a name="input_vCPU"></a> [vCPU](#input\_vCPU) | How many vCPU | `number` | n/a | yes |
 | <a name="input_vMEM"></a> [vMEM](#input\_vMEM) | How many vMEM | `number` | n/a | yes |

@@ -18,7 +18,7 @@ variable "disksize" {
 variable "thin_provisioned" {
   description = "Thinprovision the disk (Defaults to: true)"
   type        = bool
-default = true
+  default     = true
 }
 variable "eagerly_scrub" {
   description = "Eagerly scrub disk (Defaults to: false)"
