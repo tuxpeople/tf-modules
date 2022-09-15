@@ -1,69 +1,69 @@
 variable "instances_count" {
   description = "How many of those VM instances? (Default: 1)"
-  type = number
+  type        = number
   default     = "1"
 }
 variable "vCPU" {
   description = "How many vCPU"
-  type = number
+  type        = number
 }
 variable "vMEM" {
   description = "How many vMEM"
-  type = number
+  type        = number
 }
 variable "disksize" {
   description = "Disksize in GB"
-  type = number
+  type        = number
 }
 variable "thin_provisioned" {
   description = "How many vCPU"
-  type = string
+  type        = string
 }
 variable "eagerly_scrub" {
   description = "Eagerly scrub disk (Defaults to: true)"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 variable "folder" {
   description = "Folder where the VMs should be placed (must exist)"
-  type = string
+  type        = string
 }
 variable "datastore" {
   description = "Datastore where the VMs should be placed (must exist)"
-  type = string
+  type        = string
 }
 variable "network" {
   description = "Network which the VM should be connected to (must exist)"
-  type = string
+  type        = string
 }
 variable "template" {
   description = "Which template to clone. (Defaults to: focal-server-cloudimg-amd64)"
-  type = string
-    default         = "focal-server-cloudimg-amd64"
+  type        = string
+  default     = "focal-server-cloudimg-amd64"
 }
 variable "cluster" {
   description = "Cluster where the VMs should be placed (Defaults to: Homelab)"
-  type = string
-  default = "Homelab"
+  type        = string
+  default     = "Homelab"
 }
 variable "datacenter" {
   description = "Datacenter where the VMs should be placed (Defaults to: SKY)"
-  type = string
-  default = "SKY"
+  type        = string
+  default     = "SKY"
 }
 variable "hostname" {
   description = "Hostname of the VM, will be appended with a number depending on how many VMs beeing created."
-  type = string
+  type        = string
 }
 variable "user_data" {
   description = "Supply a special cloud-init file. If empty, the module's default will be used."
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 variable "guest_id" {
   description = "guest_id of the VM (Defaults to: ubuntu64Guest)"
-  type = string
-  default = "ubuntu64Guest"
+  type        = string
+  default     = "ubuntu64Guest"
 }
 variable "ssh_public_keyfile" {
   description = "SSH public keyfile for the VMs (Default: ~/.ssh/id_rsa.pub)"
