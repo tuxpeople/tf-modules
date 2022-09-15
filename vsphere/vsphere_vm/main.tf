@@ -5,29 +5,29 @@ locals {
 
 data "vsphere_datacenter" "main" {
   count = var.instances_count
-  name = var.datacenter
+  name  = var.datacenter
 }
 
 data "vsphere_compute_cluster" "main" {
-  count = var.instances_count
+  count         = var.instances_count
   name          = var.cluster
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
 
 data "vsphere_datastore" "main" {
-  count = var.instances_count
+  count         = var.instances_count
   name          = var.datastore
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
 
 data "vsphere_network" "main" {
-  count = var.instances_count
+  count         = var.instances_count
   name          = var.network
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
 
 data "vsphere_virtual_machine" "template" {
-  count = var.instances_count
+  count         = var.instances_count
   name          = var.template
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
@@ -39,10 +39,10 @@ resource "vsphere_virtual_machine" "main" {
   datastore_id     = data.vsphere_datastore.main[count.index].id
   folder           = var.folder
 
-  name     = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
-  num_cpus = var.vCPU
-  memory   = var.vMEM
-  guest_id = data.vsphere_virtual_machine.template[count.index].guest_id
+  name                       = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
+  num_cpus                   = var.vCPU
+  memory                     = var.vMEM
+  guest_id                   = data.vsphere_virtual_machine.template[count.index].guest_id
   wait_for_guest_net_timeout = 0
 
   cdrom {
@@ -75,7 +75,7 @@ resource "vsphere_virtual_machine" "main" {
       instance-id = "${local.clean_name}"
     }
   }
-  
+
   provisioner "local-exec" {
     command = "fix-ssh-key ${local.clean_name}"
   }
