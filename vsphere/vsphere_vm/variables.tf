@@ -20,9 +20,9 @@ variable "thin_provisioned" {
   type        = string
 }
 variable "eagerly_scrub" {
-  description = "Eagerly scrub disk (Defaults to: true)"
+  description = "Eagerly scrub disk (Defaults to: false)"
   type        = bool
-  default     = true
+  default     = false
 }
 variable "folder" {
   description = "Folder where the VMs should be placed (must exist)"
