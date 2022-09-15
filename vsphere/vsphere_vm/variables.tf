@@ -16,8 +16,9 @@ variable "disksize" {
   type        = number
 }
 variable "thin_provisioned" {
-  description = "How many vCPU"
-  type        = string
+  description = "Thinprovision the disk (Defaults to: true)"
+  type        = bool
+default = true
 }
 variable "eagerly_scrub" {
   description = "Eagerly scrub disk (Defaults to: false)"
