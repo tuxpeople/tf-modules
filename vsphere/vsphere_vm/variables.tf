@@ -49,7 +49,7 @@ variable "cluster" {
 variable "datacenter" {
   description = "Datacenter where the VMs should be placed (Defaults to: SKY)"
   type = string
-  default "SKY"
+  default = "SKY"
 }
 variable "hostname" {
   description = "Hostname of the VM, will be appended with a number depending on how many VMs beeing created."
