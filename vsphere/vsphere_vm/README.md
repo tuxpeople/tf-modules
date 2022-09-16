@@ -36,7 +36,7 @@ No modules.
 | <a name="input_folder"></a> [folder](#input\_folder) | Folder where the VMs should be placed (must exist) | `string` | n/a | yes |
 | <a name="input_guest_id"></a> [guest\_id](#input\_guest\_id) | guest\_id of the VM (Defaults to: ubuntu64Guest) | `string` | `"ubuntu64Guest"` | no |
 | <a name="input_hostname"></a> [hostname](#input\_hostname) | Hostname of the VM, will be appended with a number depending on how many VMs beeing created. | `string` | n/a | yes |
-| <a name="input_instances_count"></a> [instances\_count](#input\_instances\_count) | How many of those VM instances? (Default: 1) | `number` | `"1"` | no |
+| <a name="input_instances_count"></a> [instances\_count](#input\_instances\_count) | How many of those VM instances? (Default: 1) | `string` | `"1"` | no |
 | <a name="input_network"></a> [network](#input\_network) | Network which the VM should be connected to (must exist) | `string` | n/a | yes |
 | <a name="input_ssh_public_keyfile"></a> [ssh\_public\_keyfile](#input\_ssh\_public\_keyfile) | SSH public keyfile for the VMs (Default: ~/.ssh/id\_rsa.pub) | `string` | `"~/.ssh/id_rsa.pub"` | no |
 | <a name="input_template"></a> [template](#input\_template) | Which template to clone. (Defaults to: focal-server-cloudimg-amd64) | `string` | `"focal-server-cloudimg-amd64"` | no |
