@@ -1,6 +1,6 @@
 variable "instances_count" {
   description = "How many of those VM instances? (Default: 1)"
-  type        = number
+  type        = string
   default     = "1"
 }
 variable "vCPU" {
