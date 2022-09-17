@@ -77,14 +77,14 @@ resource "vsphere_virtual_machine" "main" {
   }
 
   extra_config = {
-    "guestinfo.metadata"          = base64encode(templatefile("${path.module}/files/cloud-init-metadata.tftpl", ({
-        hostname    = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
-        instance_id = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
-      })))
+    "guestinfo.metadata" = base64encode(templatefile("${path.module}/files/cloud-init-metadata.tftpl", ({
+      hostname    = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
+      instance_id = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
+    })))
     "guestinfo.metadata.encoding" = "base64"
-    "guestinfo.userdata"          = base64encode(templatefile(local.user_data, ({
-        pubkey      = file(pathexpand(var.ssh_public_keyfile))
-      })))
+    "guestinfo.userdata" = base64encode(templatefile(local.user_data, ({
+      pubkey = file(pathexpand(var.ssh_public_keyfile))
+    })))
     "guestinfo.userdata.encoding" = "base64"
   }
 
