@@ -1,6 +1,5 @@
 locals {
   user_data  = var.user_data != "" ? var.user_data : "${path.module}/files/cloud-init-userdata.tftpl"
-  clean_name = substr(lower(replace(var.hostname, "/[[:^alnum:]]/", "")), 0, 60)
 }
 
 data "vsphere_datacenter" "main" {
@@ -39,7 +38,7 @@ resource "vsphere_virtual_machine" "main" {
   datastore_id     = data.vsphere_datastore.main[count.index].id
   folder           = var.folder
 
-  name                       = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
+  name                       = (var.instances_count == "1" ? "${var.hostname}" : "${var.hostname}${(count.index + 1)}")
   num_cpus                   = var.vCPU
   memory                     = var.vMEM
   guest_id                   = data.vsphere_virtual_machine.template[count.index].guest_id
@@ -68,29 +67,31 @@ resource "vsphere_virtual_machine" "main" {
     properties = {
       user-data = base64encode(templatefile(local.user_data, ({
         pubkey      = file(pathexpand(var.ssh_public_keyfile))
-        hostname    = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
-        instance_id = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
+        hostname    = (var.instances_count == "1" ? "${var.hostname}" : "${var.hostname}${(count.index + 1)}")
+        instance_id = (var.instances_count == "1" ? "${var.hostname}" : "${var.hostname}${(count.index + 1)}")
       })))
-      hostname    = "${local.clean_name}"
-      instance-id = "${local.clean_name}"
+      hostname    = "${var.hostname}"
+      instance-id = "${var.hostname}"
     }
   } */
 
   extra_config = {
     "guestinfo.metadata" = base64encode(templatefile("${path.module}/files/cloud-init-metadata.tftpl", ({
-      hostname    = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
-      instance_id = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
+      fqdn    = "${var.hostname}${(count.index + 1)}"
+      hostname    = "${var.hostname}${(count.index + 1)}"
+      instance_id = "${var.hostname}${(count.index + 1)}"
     })))
     "guestinfo.metadata.encoding" = "base64"
     "guestinfo.userdata" = base64encode(templatefile(local.user_data, ({
       pubkey = file(pathexpand(var.ssh_public_keyfile))
-      hostname    = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
-      instance_id = (var.instances_count == "1" ? "${local.clean_name}" : "${local.clean_name}${(count.index + 1)}")
+      fqdn    = "${var.hostname}${(count.index + 1)}"
+      hostname    = "${var.hostname}${(count.index + 1)}"
+      instance_id = "${var.hostname}${(count.index + 1)}"
     })))
     "guestinfo.userdata.encoding" = "base64"
   }
 
   provisioner "local-exec" {
-    command = "fix-ssh-key ${local.clean_name}"
+    command = "fix-ssh-key ${var.hostname}"
   }
 }
