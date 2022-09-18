@@ -77,16 +77,16 @@ resource "vsphere_virtual_machine" "main" {
 
   extra_config = {
     "guestinfo.metadata" = base64encode(templatefile("${path.module}/files/cloud-init-metadata.tftpl", ({
-      fqdn        = "${var.hostname}${(count.index + 1)}"
-      hostname    = "${var.hostname}${(count.index + 1)}"
-      instance_id = "${var.hostname}${(count.index + 1)}"
+      fqdn        = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      hostname    = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      instance_id = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
     })))
     "guestinfo.metadata.encoding" = "base64"
     "guestinfo.userdata" = base64encode(templatefile(local.user_data, ({
       pubkey      = file(pathexpand(var.ssh_public_keyfile))
-      fqdn        = "${var.hostname}${(count.index + 1)}"
-      hostname    = "${var.hostname}${(count.index + 1)}"
-      instance_id = "${var.hostname}${(count.index + 1)}"
+      fqdn        = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      hostname    = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      instance_id = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
     })))
     "guestinfo.userdata.encoding" = "base64"
   }
