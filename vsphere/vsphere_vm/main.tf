@@ -1,5 +1,5 @@
 locals {
-  user_data  = var.user_data != "" ? var.user_data : "${path.module}/files/cloud-init-userdata.tftpl"
+  user_data = var.user_data != "" ? var.user_data : "${path.module}/files/cloud-init-userdata.tftpl"
 }
 
 data "vsphere_datacenter" "main" {
@@ -77,14 +77,14 @@ resource "vsphere_virtual_machine" "main" {
 
   extra_config = {
     "guestinfo.metadata" = base64encode(templatefile("${path.module}/files/cloud-init-metadata.tftpl", ({
-      fqdn    = "${var.hostname}${(count.index + 1)}"
+      fqdn        = "${var.hostname}${(count.index + 1)}"
       hostname    = "${var.hostname}${(count.index + 1)}"
       instance_id = "${var.hostname}${(count.index + 1)}"
     })))
     "guestinfo.metadata.encoding" = "base64"
     "guestinfo.userdata" = base64encode(templatefile(local.user_data, ({
-      pubkey = file(pathexpand(var.ssh_public_keyfile))
-      fqdn    = "${var.hostname}${(count.index + 1)}"
+      pubkey      = file(pathexpand(var.ssh_public_keyfile))
+      fqdn        = "${var.hostname}${(count.index + 1)}"
       hostname    = "${var.hostname}${(count.index + 1)}"
       instance_id = "${var.hostname}${(count.index + 1)}"
     })))
