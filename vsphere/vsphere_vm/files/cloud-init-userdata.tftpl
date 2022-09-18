@@ -1,7 +1,7 @@
 #cloud-config
-# hostname: ${hostname}
-# instance-id: ${instance_id}
-# fqdn: ${fqdn}
+hostname: ${hostname}
+instance-id: ${instance_id}
+fqdn: ${fqdn}
 
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
