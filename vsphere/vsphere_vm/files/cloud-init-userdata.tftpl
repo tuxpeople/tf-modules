@@ -1,4 +1,7 @@
 #cloud-config
+hostname: ${hostname}
+instance-id: ${instance_id}
+
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 package_upgrade: true
