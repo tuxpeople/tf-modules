@@ -38,7 +38,7 @@ resource "vsphere_virtual_machine" "main" {
   datastore_id     = data.vsphere_datastore.main[count.index].id
   folder           = var.folder
 
-  name                       = (var.instances_count == "1" ? "${var.hostname}" : "${var.hostname}${(count.index + 1)}")
+  name                       = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
   num_cpus                   = var.vCPU
   memory                     = var.vMEM
   guest_id                   = data.vsphere_virtual_machine.template[count.index].guest_id
@@ -67,8 +67,8 @@ resource "vsphere_virtual_machine" "main" {
     properties = {
       user-data = base64encode(templatefile(local.user_data, ({
         pubkey      = file(pathexpand(var.ssh_public_keyfile))
-        hostname    = (var.instances_count == "1" ? "${var.hostname}" : "${var.hostname}${(count.index + 1)}")
-        instance_id = (var.instances_count == "1" ? "${var.hostname}" : "${var.hostname}${(count.index + 1)}")
+        hostname    = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+        instance_id = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
       })))
       hostname    = "${var.hostname}"
       instance-id = "${var.hostname}"
