@@ -64,7 +64,7 @@ resource "vsphere_virtual_machine" "main" {
     template_uuid = data.vsphere_virtual_machine.template[count.index].id
   }
 
-  vapp {
+  /* vapp {
     properties = {
       user-data = base64encode(templatefile(local.user_data, ({
         pubkey      = file(pathexpand(var.ssh_public_keyfile))
@@ -74,7 +74,7 @@ resource "vsphere_virtual_machine" "main" {
       hostname    = "${local.clean_name}"
       instance-id = "${local.clean_name}"
     }
-  }
+  } */
 
   extra_config = {
     "guestinfo.metadata" = base64encode(templatefile("${path.module}/files/cloud-init-metadata.tftpl", ({
