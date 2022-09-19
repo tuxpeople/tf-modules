@@ -38,6 +38,8 @@ No modules.
 | <a name="input_hostname"></a> [hostname](#input\_hostname) | Hostname of the VM, will be appended with a number depending on how many VMs beeing created. | `string` | n/a | yes |
 | <a name="input_instances_count"></a> [instances\_count](#input\_instances\_count) | How many of those VM instances? (Default: 1) | `string` | `"1"` | no |
 | <a name="input_network"></a> [network](#input\_network) | Network which the VM should be connected to (must exist) | `string` | n/a | yes |
+| <a name="input_redhat_password"></a> [redhat\_password](#input\_redhat\_password) | Password to subscribe a RHEL system to RedHat (used when guest\_id == rhel8\_64Guest) | `string` | `""` | no |
+| <a name="input_redhat_username"></a> [redhat\_username](#input\_redhat\_username) | Username to subscribe a RHEL system to RedHat (used when guest\_id == rhel8\_64Guest) | `string` | `""` | no |
 | <a name="input_ssh_public_keyfile"></a> [ssh\_public\_keyfile](#input\_ssh\_public\_keyfile) | SSH public keyfile for the VMs (Default: ~/.ssh/id\_rsa.pub) | `string` | `"~/.ssh/id_rsa.pub"` | no |
 | <a name="input_template"></a> [template](#input\_template) | Which template to clone. (Defaults to: focal-server-cloudimg-amd64) | `string` | `"focal-server-cloudimg-amd64"` | no |
 | <a name="input_thin_provisioned"></a> [thin\_provisioned](#input\_thin\_provisioned) | Thinprovision the disk (Defaults to: true) | `bool` | `true` | no |
