@@ -38,9 +38,9 @@ variable "network" {
   type        = string
 }
 variable "template" {
-  description = "Which template to clone. (Defaults to: focal-server-cloudimg-amd64)"
+  description = "Which template to clone. (Defaults to: linux-ubuntu-server-22-04-lts)"
   type        = string
-  default     = "focal-server-cloudimg-amd64"
+  default     = "linux-ubuntu-server-22-04-lts"
 }
 variable "cluster" {
   description = "Cluster where the VMs should be placed (Defaults to: Homelab)"

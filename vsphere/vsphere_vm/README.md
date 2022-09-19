@@ -41,7 +41,7 @@ No modules.
 | <a name="input_redhat_password"></a> [redhat\_password](#input\_redhat\_password) | Password to subscribe a RHEL system to RedHat (used when guest\_id == rhel8\_64Guest) | `string` | `""` | no |
 | <a name="input_redhat_username"></a> [redhat\_username](#input\_redhat\_username) | Username to subscribe a RHEL system to RedHat (used when guest\_id == rhel8\_64Guest) | `string` | `""` | no |
 | <a name="input_ssh_public_keyfile"></a> [ssh\_public\_keyfile](#input\_ssh\_public\_keyfile) | SSH public keyfile for the VMs (Default: ~/.ssh/id\_rsa.pub) | `string` | `"~/.ssh/id_rsa.pub"` | no |
-| <a name="input_template"></a> [template](#input\_template) | Which template to clone. (Defaults to: focal-server-cloudimg-amd64) | `string` | `"focal-server-cloudimg-amd64"` | no |
+| <a name="input_template"></a> [template](#input\_template) | Which template to clone. (Defaults to: linux-ubuntu-server-22-04-lts) | `string` | `"linux-ubuntu-server-22-04-lts"` | no |
 | <a name="input_thin_provisioned"></a> [thin\_provisioned](#input\_thin\_provisioned) | Thinprovision the disk (Defaults to: true) | `bool` | `true` | no |
 | <a name="input_user_data"></a> [user\_data](#input\_user\_data) | Supply a special cloud-init file. If empty, the module's default will be used. | `string` | `""` | no |
 | <a name="input_vCPU"></a> [vCPU](#input\_vCPU) | How many vCPU | `number` | n/a | yes |
