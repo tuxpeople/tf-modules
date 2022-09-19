@@ -52,6 +52,16 @@ variable "datacenter" {
   type        = string
   default     = "SKY"
 }
+variable "redhat_username" {
+  description = "Username to subscribe a RHEL system to RedHat (used when guest_id == rhel8_64Guest)"
+  type        = string
+  default     = ""
+}
+variable "redhat_password" {
+  description = "Password to subscribe a RHEL system to RedHat (used when guest_id == rhel8_64Guest)"
+  type        = string
+  default     = ""
+}
 variable "hostname" {
   description = "Hostname of the VM, will be appended with a number depending on how many VMs beeing created."
   type        = string

@@ -3,6 +3,16 @@ hostname: ${hostname}
 instance-id: ${instance_id}
 fqdn: ${fqdn}
 
+%{ if guest_id == "rhel8_64Guest" }
+rh_subscription:
+  username: ${redhat_username}
+  password: "${redhat_password}"
+  auto-attach: true
+  enable-repo:
+    - rhel-8-for-x86_64-baseos-rpms
+    - rhel-8-for-x86_64-appstream-rpms
+%{ endif }
+
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 package_upgrade: true
@@ -28,3 +38,7 @@ runcmd:
   - command -v dhcpcd >/dev/null 2>&1 && { echo renew; dhcpcd -k; dhcpcd -n; }
   - sudo eject
   - sudo eject -T
+%{ if guest_id == "rhel8_64Guest" }
+  - subscription-manager remove --all
+  - subscription-manager unregister
+%{ endif }
