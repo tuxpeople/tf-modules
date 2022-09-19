@@ -51,8 +51,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_DC_ID"></a> [DC\_ID](#output\_DC\_ID) | id of vSphere Datacenter |
-| <a name="output_ResPool_ID"></a> [ResPool\_ID](#output\_ResPool\_ID) | Resource Pool id |
 | <a name="output_VM"></a> [VM](#output\_VM) | VM Names |
 | <a name="output_disk"></a> [disk](#output\_disk) | Disks of the deployed VM |
 | <a name="output_guest-ip"></a> [guest-ip](#output\_guest-ip) | all the registered ip address of the VM |
