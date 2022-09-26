@@ -38,10 +38,10 @@ resource "vsphere_virtual_machine" "main" {
   datastore_id     = data.vsphere_datastore.main[count.index].id
   folder           = var.folder
 
-  name                       = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
-  num_cpus                   = var.vCPU
-  memory                     = var.vMEM
-  guest_id                   = data.vsphere_virtual_machine.template[count.index].guest_id
+  name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+  num_cpus = var.vCPU
+  memory   = var.vMEM
+  guest_id = data.vsphere_virtual_machine.template[count.index].guest_id
 
   cdrom {
     client_device = true

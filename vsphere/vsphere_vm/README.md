@@ -46,6 +46,8 @@ No modules.
 | <a name="input_user_data"></a> [user\_data](#input\_user\_data) | Supply a special cloud-init file. If empty, the module's default will be used. | `string` | `""` | no |
 | <a name="input_vCPU"></a> [vCPU](#input\_vCPU) | How many vCPU | `number` | n/a | yes |
 | <a name="input_vMEM"></a> [vMEM](#input\_vMEM) | How many vMEM | `number` | n/a | yes |
+| <a name="input_wait_for_guest_net_routable"></a> [wait\_for\_guest\_net\_routable](#input\_wait\_for\_guest\_net\_routable) | Controls whether or not the guest network waiter waits for a routable address. (Defaults to: true) | `bool` | `true` | no |
+| <a name="input_wait_for_guest_net_timeout"></a> [wait\_for\_guest\_net\_timeout](#input\_wait\_for\_guest\_net\_timeout) | The amount of time, in minutes, to wait for an available guest IP address on the virtual machine (Defaults to: 5) | `number` | `"5"` | no |
 
 ## Outputs
 
