@@ -81,3 +81,13 @@ variable "ssh_public_keyfile" {
   type        = string
   default     = "~/.ssh/id_rsa.pub"
 }
+variable "wait_for_guest_net_routable" {
+  description = "Controls whether or not the guest network waiter waits for a routable address. (Defaults to: true)"
+  type        = bool
+  default     = true
+}
+variable "wait_for_guest_net_timeout" {
+  description = "The amount of time, in minutes, to wait for an available guest IP address on the virtual machine (Defaults to: 5)"
+  type        = number
+  default     = "5"
+}

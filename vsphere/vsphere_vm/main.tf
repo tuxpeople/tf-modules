@@ -42,7 +42,6 @@ resource "vsphere_virtual_machine" "main" {
   num_cpus                   = var.vCPU
   memory                     = var.vMEM
   guest_id                   = data.vsphere_virtual_machine.template[count.index].guest_id
-  wait_for_guest_net_timeout = 0
 
   cdrom {
     client_device = true
@@ -93,6 +92,9 @@ resource "vsphere_virtual_machine" "main" {
     })))
     "guestinfo.userdata.encoding" = "base64"
   }
+
+  wait_for_guest_net_routable = var.wait_for_guest_net_routable
+  wait_for_guest_net_timeout  = var.wait_for_guest_net_timeout
 
   provisioner "local-exec" {
     command = "while ! nc -z ${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 22; do sleep 10; done; fix-ssh-key ${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")}; ssh ansible@${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 'cloud-init status --wait > /dev/null'; sleep 20"
