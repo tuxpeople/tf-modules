@@ -17,9 +17,9 @@ resource "random_pet" "pet" {
 
 resource "null_resource" "copy-dns" {
   triggers = {
-    content = local.dns_config
-      user        = var.sshuser
-      host        = var.dnsserver
+    content     = local.dns_config
+    user        = var.sshuser
+    host        = var.dnsserver
     destination = local.dns_file
   }
 

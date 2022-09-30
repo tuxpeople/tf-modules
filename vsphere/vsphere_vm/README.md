@@ -32,6 +32,7 @@ No modules.
 | <a name="input_datacenter"></a> [datacenter](#input\_datacenter) | Datacenter where the VMs should be placed (Defaults to: SKY) | `string` | `"SKY"` | no |
 | <a name="input_datastore"></a> [datastore](#input\_datastore) | Datastore where the VMs should be placed (must exist) | `string` | n/a | yes |
 | <a name="input_disksize"></a> [disksize](#input\_disksize) | Disksize in GB | `number` | n/a | yes |
+| <a name="input_domain"></a> [domain](#input\_domain) | local domain (Defaults to: lab.tdeutsch.ch) | `string` | `"lab.tdeutsch.ch"` | no |
 | <a name="input_eagerly_scrub"></a> [eagerly\_scrub](#input\_eagerly\_scrub) | Eagerly scrub disk (Defaults to: false) | `bool` | `false` | no |
 | <a name="input_folder"></a> [folder](#input\_folder) | Folder where the VMs should be placed (must exist) | `string` | n/a | yes |
 | <a name="input_guest_id"></a> [guest\_id](#input\_guest\_id) | guest\_id of the VM (Defaults to: ubuntu64Guest) | `string` | `"ubuntu64Guest"` | no |
