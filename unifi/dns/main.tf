@@ -1,6 +1,6 @@
 locals {
   dns_config = templatefile(
-    "${path.module}/files/dns.tftpl",
+    "${path.module}/templates/dns.tftpl",
     {
       serverrecord  = var.serverrecord
       addressrecord = var.addressrecord
