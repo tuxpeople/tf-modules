@@ -41,9 +41,9 @@ resource "null_resource" "copy-dns" {
   }
 }
 
-resource "null_resource" "copy-dns" {
+resource "null_resource" "refresh-dns" {
   depends_on = [
-    null_resource.rancher-test-dns
+    null_resource.copy-dns
   ]
 
   provisioner "local-exec" {
