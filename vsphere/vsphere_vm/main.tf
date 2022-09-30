@@ -101,7 +101,7 @@ resource "vsphere_virtual_machine" "main" {
   }
 }
 
-resource "null_resource" "cleanup ssh-keys" {
+resource "null_resource" "cleanup_ssh_keys" {
   count = var.instances_count
   provisioner "local-exec" {
     command = "ssh-keygen -R ${var.hostname}; ssh-keygen -R ${var.hostname}.${var.domain}; ssh-keygen -R ${vsphere_virtual_machine.main[count.index].default_ip_address}"
