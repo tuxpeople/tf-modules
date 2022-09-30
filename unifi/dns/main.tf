@@ -38,7 +38,7 @@ resource "null_resource" "copy-dns" {
   }
 }
 
-resource "null_resource" "refresh-dns" {
+resource "null_resource" "copy-dns" {
   depends_on = [
     null_resource.rancher-test-dns
   ]
