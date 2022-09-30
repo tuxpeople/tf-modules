@@ -91,3 +91,8 @@ variable "wait_for_guest_net_timeout" {
   type        = number
   default     = "5"
 }
+variable "domain" {
+  description = "local domain (Defaults to: lab.tdeutsch.ch)"
+  type        = string
+default = "lab.tdeutsch.ch"
+}
