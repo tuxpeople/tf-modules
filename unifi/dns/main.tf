@@ -2,10 +2,10 @@ locals {
   dns_config = templatefile(
     "${path.module}/files/dns.tftpl",
     {
-      serverrecord = var.serverrecord
+      serverrecord  = var.serverrecord
       addressrecord = var.addressrecord
-      hostrecord = var.hostrecord
-      cnamerecord = var.cnamerecord
+      hostrecord    = var.hostrecord
+      cnamerecord   = var.cnamerecord
     }
   )
   dns_file = "/mnt/data/dns.d/${random_pet.pet.id}.dns"
@@ -22,13 +22,13 @@ resource "null_resource" "copy-dns" {
 
   provisioner "file" {
     content     = local.dns_config
-    destination = "${local.dns_file}"
+    destination = local.dns_file
 
     connection {
       type        = "ssh"
-      user        = "${var.sshuser}"
+      user        = var.sshuser
       private_key = file(pathexpand("${var.sshkey}"))
-      host        = "${var.dnsserver}"
+      host        = var.dnsserver
     }
   }
 
