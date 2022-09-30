@@ -99,8 +99,11 @@ resource "vsphere_virtual_machine" "main" {
   provisioner "local-exec" {
     command = "while ! nc -z ${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 22; do sleep 10; done; ssh -o StrictHostKeyChecking=no ansible@${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 'cloud-init status --wait > /dev/null'; sleep 20"
   }
+}
 
+resource "null_resource" "cleanup ssh-keys" {
+  count = var.instances_count
   provisioner "local-exec" {
-    command = "sleep 20; ssh-keygen -R ${var.hostname}; ssh-keygen -R ${var.hostname}.${var.domain}; ssh-keygen -R ${self.default_ip_address}"
+    command = "ssh-keygen -R ${var.hostname}; ssh-keygen -R ${var.hostname}.${var.domain}; ssh-keygen -R ${vsphere_virtual_machine.main[count.index].default_ip_address}"
   }
 }
