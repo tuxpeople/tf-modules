@@ -17,7 +17,10 @@ resource "random_pet" "pet" {
 
 resource "null_resource" "copy-dns" {
   triggers = {
-    foobar = local.dns_config
+    content = local.dns_config
+      user        = var.sshuser
+      host        = var.dnsserver
+    destination = local.dns_file
   }
 
   provisioner "file" {
@@ -33,7 +36,7 @@ resource "null_resource" "copy-dns" {
   }
 
   provisioner "local-exec" {
-    command = "ssh ${self.connection.user}@${self.connection.host} 'rm -f ${self.destination} && /mnt/data/on_boot.d/11-create-local-dns-conf.sh'"
+    command = "ssh ${self.triggers.user}@${self.triggers.host} 'rm -f ${self.triggers.destination} && /mnt/data/on_boot.d/11-create-local-dns-conf.sh'"
     when    = destroy
   }
 }
