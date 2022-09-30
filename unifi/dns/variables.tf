@@ -11,7 +11,7 @@ variable "addressrecord" {
 }
 
 variable "hostrecord" {
-  description = "Map of host records (Defaults to {}) Eg: {name = \"Mabel\", age = 52}"
+  description = "Map of host records (Defaults to {}) Eg: {\"foo.example.com\" = \"192.168.0.2\", \"bar.example.com\" = \"192.168.0.3\"}"
   type        = map(any)
   default     = {}
 }
