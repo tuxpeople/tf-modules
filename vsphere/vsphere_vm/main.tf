@@ -101,6 +101,6 @@ resource "vsphere_virtual_machine" "main" {
   } */
 
   provisioner "local-exec" {
-    command = "ssh-keygen -R ${var.hostname}; ssh-keygen -R ${var.hostname}.${var.domain}; ssh-keygen -R ${self.default_ip_address}"
+    command = "sleep 20; ssh-keygen -R ${var.hostname}; ssh-keygen -R ${var.hostname}.${var.domain}; ssh-keygen -R ${self.default_ip_address}"
   }
 }
