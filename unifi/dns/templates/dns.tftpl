@@ -1,0 +1,15 @@
+%{ for serverrecord_key, serverrecord_value in serverrecord }
+host-record=${serverrecord_key},${serverrecord_value}
+%{ endfor ~}
+
+%{ for addressrecord_key, addressrecord_value in addressrecord }
+host-record=${addressrecord_key},${addressrecord_value}
+%{ endfor ~}
+
+%{ for hostrecord_key, hostrecord_value in hostrecord }
+host-record=${hostrecord_key},${hostrecord_value}
+%{ endfor ~}
+
+%{ for cnamerecord_key, cnamerecord_value in cnamerecord }
+host-record=${cnamerecord_key},${cnamerecord_value}
+%{ endfor ~}
