@@ -33,7 +33,7 @@ resource "null_resource" "copy-dns" {
   }
 
   provisioner "local-exec" {
-    command = "ssh ${var.sshuser}@${var.dnsserver} 'rm -f ${local.dns_file} && /mnt/data/on_boot.d/11-create-local-dns-conf.sh'"
+    command = "ssh ${self.connection.user}@${self.connection.host} 'rm -f ${self.destination} && /mnt/data/on_boot.d/11-create-local-dns-conf.sh'"
     when    = destroy
   }
 }
