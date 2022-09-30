@@ -1,25 +1,25 @@
 variable "serverrecord" {
   description = "Map of server records (Defaults to {}) Eg: {name = \"Mabel\", age = 52}"
   type        = map(any)
-  default     = ""
+  default     = {}
 }
 
 variable "addressrecord" {
   description = "Map of address records (Defaults to {}) Eg: {name = \"Mabel\", age = 52}"
   type        = map(any)
-  default     = ""
+  default     = {}
 }
 
 variable "hostrecord" {
   description = "Map of host records (Defaults to {}) Eg: {name = \"Mabel\", age = 52}"
   type        = map(any)
-  default     = ""
+  default     = {}
 }
 
 variable "cnamerecord" {
   description = "Map of cname records (Defaults to {}) Eg: {name = \"Mabel\", age = 52}"
   type        = map(any)
-  default     = ""
+  default     = {}
 }
 
 variable "sshkey" {
