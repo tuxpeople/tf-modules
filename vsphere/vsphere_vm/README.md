@@ -7,6 +7,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
+| <a name="provider_null"></a> [null](#provider\_null) | n/a |
 | <a name="provider_vsphere"></a> [vsphere](#provider\_vsphere) | n/a |
 
 ## Modules
@@ -17,6 +18,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [null_resource.cleanup_ssh_keys](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [vsphere_virtual_machine.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/resources/virtual_machine) | resource |
 | [vsphere_compute_cluster.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/compute_cluster) | data source |
 | [vsphere_datacenter.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/datacenter) | data source |
