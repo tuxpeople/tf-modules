@@ -58,7 +58,7 @@ resource "ssh_resource" "deploy-first-servernode" {
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
     "sleep 60",
-    "/var/lib/rancher/rke2/bin/kubectl --insecure-skip-tls-verify --kubeconfig /etc/rancher/rke2/rke2.yaml wait --for=condition=Ready nodes --all --timeout=600s"
+    "sudo /var/lib/rancher/rke2/bin/kubectl --insecure-skip-tls-verify --kubeconfig /etc/rancher/rke2/rke2.yaml wait --for=condition=Ready nodes --all --timeout=600s"
   ]
   user        = local.ssh_user_server
   private_key = local.ssh_key_server
