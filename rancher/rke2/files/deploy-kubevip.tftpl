@@ -1,0 +1,26 @@
+#!/usr/bin/bash
+
+export TAG=$(curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name")
+export CONTAINER_RUNTIME_ENDPOINT=unix:///run/k3s/containerd/containerd.sock
+export CONTAINERD_ADDRESS=/run/k3s/containerd/containerd.sock
+export PATH=/var/lib/rancher/rke2/bin:$PATH
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+mkdir -p /var/lib/rancher/rke2/server/manifests
+curl -s https://kube-vip.io/manifests/rbac.yaml > /var/lib/rancher/rke2/server/manifests/kube-vip-rbac.yaml
+
+while ! command -v ctr &> /dev/null
+do
+    echo "ctr could not be found, rke2 not yet ready"
+    sleep 10
+done
+
+ctr image pull docker.io/plndr/kube-vip:$TAG
+ctr --namespace default run --rm --net-host docker.io/plndr/kube-vip:$TAG vip /kube-vip manifest daemonset \
+--arp \
+--interface ${INTERFACE} \
+--address ${VIP} \
+--controlplane \
+--leaderElection \
+--taint \
+--services \
+--inCluster | tee /var/lib/rancher/rke2/server/manifests/kube-vip.yaml

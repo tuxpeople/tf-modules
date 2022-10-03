@@ -1,0 +1,17 @@
+%{ if "${MACHINENO}" > "0" }
+server: https://${FQDN}:9345
+%{ endif }
+
+token: ${TOKEN}
+
+%{ if "${NODETYPE}" != "worker" }
+tls-san:
+  - "${VIP}"
+  - "${FQDN}"
+%{ endif }
+
+%{ if "${NODETYPE}" == "masteronly" }
+node-taint:
+  - "CriticalAddonsOnly=true:NoExecute"
+%{ endif }
+
