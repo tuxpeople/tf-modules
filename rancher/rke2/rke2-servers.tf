@@ -3,7 +3,7 @@ resource "null_resource" "deploy-rke2-server-config" {
   triggers = {
     template = templatefile("${path.module}/files/rke2-conf.tftpl", {
       MACHINENO = count.index
-      NODETYPE  = local.agentnode_amount != "0" ? "servernodeonly" : "allinone"
+      NODETYPE  = local.agentnode_amount != "0" ? "masteronly" : "allinone"
       TOKEN     = local.token
       VIP       = local.vipip
     FQDN = local.fqdn })
