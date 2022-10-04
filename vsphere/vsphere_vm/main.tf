@@ -100,11 +100,3 @@ resource "vsphere_virtual_machine" "main" {
     command = "while ! nc -z ${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 22; do sleep 10; done; ssh -o StrictHostKeyChecking=no ansible@${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 'cloud-init status --wait > /dev/null'; sleep 20"
   }
 }
-
-resource "null_resource" "cleanup_ssh_keys" {
-  depends_on = [vsphere_virtual_machine.main]
-  count = var.instances_count
-  provisioner "local-exec" {
-    command = "ssh-keygen -R ${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")}; ssh-keygen -R ${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")}.${var.domain}; ssh-keygen -R ${vsphere_virtual_machine.main[count.index].default_ip_address}; ssh-keyscan -t rsa ${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")},${vsphere_virtual_machine.main[count.index].default_ip_address} >> ~/.ssh/known_hosts"
-  }
-}
