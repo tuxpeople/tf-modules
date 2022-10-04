@@ -4,6 +4,7 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.5.1 |
+| <a name="requirement_rancher2"></a> [rancher2](#requirement\_rancher2) | 1.24.0 |
 | <a name="requirement_ssh"></a> [ssh](#requirement\_ssh) | 2.2.1 |
 
 ## Providers
@@ -11,8 +12,8 @@
 | Name | Version |
 |------|---------|
 | <a name="provider_helm"></a> [helm](#provider\_helm) | 2.5.1 |
-| <a name="provider_rancher2.admin"></a> [rancher2.admin](#provider\_rancher2.admin) | n/a |
-| <a name="provider_rancher2.bootstrap"></a> [rancher2.bootstrap](#provider\_rancher2.bootstrap) | n/a |
+| <a name="provider_rancher2.admin"></a> [rancher2.admin](#provider\_rancher2.admin) | 1.24.0 |
+| <a name="provider_rancher2.bootstrap"></a> [rancher2.bootstrap](#provider\_rancher2.bootstrap) | 1.24.0 |
 
 ## Modules
 
@@ -24,8 +25,8 @@ No modules.
 |------|------|
 | [helm_release.cert_manager](https://registry.terraform.io/providers/hashicorp/helm/2.5.1/docs/resources/release) | resource |
 | [helm_release.rancher_server](https://registry.terraform.io/providers/hashicorp/helm/2.5.1/docs/resources/release) | resource |
-| [rancher2_bootstrap.admin](https://registry.terraform.io/providers/hashicorp/rancher2/latest/docs/resources/bootstrap) | resource |
-| [rancher2_cluster_v2.quickstart_workload](https://registry.terraform.io/providers/hashicorp/rancher2/latest/docs/resources/cluster_v2) | resource |
+| [rancher2_bootstrap.admin](https://registry.terraform.io/providers/rancher/rancher2/1.24.0/docs/resources/bootstrap) | resource |
+| [rancher2_cluster_v2.quickstart_workload](https://registry.terraform.io/providers/rancher/rancher2/1.24.0/docs/resources/cluster_v2) | resource |
 
 ## Inputs
 
