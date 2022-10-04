@@ -10,7 +10,7 @@ tls-san:
   - "${FQDN}"
 %{ endif }
 
-%{ if "${NODETYPE}" == "masteronly" }
+%{ if "${NODETYPE}" = "masteronly" }
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
 %{ endif }
