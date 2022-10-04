@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/helm"
       version = "2.5.1"
     }
+    rancher2 = {
+      source  = "rancher/rancher2"
+      version = "1.24.0"
+    }
   }
 }
 # Rancher2 bootstrapping provider
