@@ -4,7 +4,7 @@ terraform {
       source  = "loafoe/ssh"
       version = "2.2.1"
     }
-        helm = {
+    helm = {
       source  = "hashicorp/helm"
       version = "2.5.1"
     }
