@@ -15,6 +15,11 @@ rh_subscription:
 
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
+growpart:
+  mode: auto
+  devices: ["/"]
+  ignore_growroot_disabled: false
+
 package_upgrade: true
 packages:
   - open-vm-tools
