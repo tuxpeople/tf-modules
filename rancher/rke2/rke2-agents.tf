@@ -31,6 +31,7 @@ resource "ssh_resource" "install-agent-nodes" {
   depends_on = [ssh_resource.deploy-first-servernode]
   count      = local.agentnode_amount
   commands = [
+    "sleep 30",
     "curl -sfL https://get.rke2.io | sudo sh -",
     "sudo systemctl enable rke2-agent.service",
     "sudo systemctl start rke2-agent.service",
