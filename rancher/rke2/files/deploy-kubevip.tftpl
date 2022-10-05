@@ -1,8 +1,5 @@
 #!/usr/bin/bash
-CURLBIN=$(command -v curl)
-JQBIN=$(command -v jq)
-
-export TAG=$(${CURLBIN} -sL https://api.github.com/repos/kube-vip/kube-vip/releases | ${JQBIN} -r ".[0].name")
+export TAG=$($(command -v curl) -sL https://api.github.com/repos/kube-vip/kube-vip/releases | $(command -v jq) -r ".[0].name")
 export CONTAINER_RUNTIME_ENDPOINT=unix:///run/k3s/containerd/containerd.sock
 export CONTAINERD_ADDRESS=/run/k3s/containerd/containerd.sock
 export PATH=/var/lib/rancher/rke2/bin:$PATH
