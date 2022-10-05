@@ -82,10 +82,8 @@ resource "ssh_resource" "other-servernodes" {
   }
 
   commands = [
-    "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/22\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
-    "sleep 30",
+    "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/9345\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
     "curl -sfL https://get.rke2.io | sudo sh -",
-    "sleep 10",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
     "sleep 10",
