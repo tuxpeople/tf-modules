@@ -69,6 +69,7 @@ resource "ssh_resource" "other-servernodes" {
   depends_on = [ssh_resource.deploy-first-servernode]
   count      = local.servernode_amount - 1
   commands = [
+    "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/22\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done"
     "curl -sfL https://get.rke2.io | sudo sh -",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
