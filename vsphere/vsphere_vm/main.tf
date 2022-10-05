@@ -96,6 +96,19 @@ resource "vsphere_virtual_machine" "main" {
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
   wait_for_guest_net_timeout  = var.wait_for_guest_net_timeout
 
+connection {  
+    type        = "ssh"  
+    user        = "ansible"  
+    host        = self.default_ip_address  
+    timeout     = "10m"  
+}  
+provisioner "remote-exec" {  
+    inline = [  
+    "echo 'Waiting for user data script to finish'",  
+    "cloud-init status --wait > /dev/null"  
+    ]  
+}
+
   /* provisioner "local-exec" {
     command = "while ! nc -z ${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 22; do sleep 10; done; ssh -o StrictHostKeyChecking=no ansible@${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 'cloud-init status --wait > /dev/null'; sleep 20"
   } */
