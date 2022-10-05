@@ -78,7 +78,7 @@ resource "ssh_resource" "other-servernodes" {
 
   provisioner "local-exec" {
     interpreter = ["bash", "-c"]
-    command     = "while [[ $(cat initial_state.txt) != \"${count.index}\" ]]; do echo \"${count.index} is asleep...\";((c++)) && ((c==180)) && break;sleep 60;done"
+    command     = "while [[ $(cat initial_state.txt) != \"${count.index}\" ]]; do echo \"${count.index} is asleep...\";((c++)) && ((c==180)) && break;sleep 15;done"
   }
 
   commands = [
