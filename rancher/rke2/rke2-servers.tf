@@ -65,10 +65,22 @@ resource "ssh_resource" "deploy-first-servernode" {
   private_key = local.ssh_key_server
   host        = local.servernodes.0
 }
-
-resource "ssh_resource" "other-servernodes" {
+resource "null_resource" "set_initial_state" {
   depends_on = [ssh_resource.deploy-first-servernode]
+  provisioner "local-exec" {
+    interpreter = ["bash", "-c"]
+    command     = "echo \"0\" > initial_state.txt"
+  }
+}
+resource "ssh_resource" "other-servernodes" {
+  depends_on = [null_resource.set_initial_state]
   count      = local.servernode_amount - 1
+
+  provisioner "local-exec" {
+    interpreter = ["bash", "-c"]
+    command     = "while [[ $(cat ha_state.txt) != \"${count.index}\" ]]; do echo \"${count.index} is asleep...\";((c++)) && ((c==180)) && break;sleep 60;done"
+  }
+
   commands = [
     "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/22\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
     "sleep 30",
@@ -82,6 +94,11 @@ resource "ssh_resource" "other-servernodes" {
   user        = local.ssh_user_server
   private_key = local.ssh_key_server
   host        = local.servernodes[count.index + 1]
+
+    provisioner "local-exec" {
+    interpreter = ["bash", "-c"]
+    command     = "echo \"${count.index + 1}\" > initial_state.txt"
+  }
 }
 
 resource "ssh_resource" "retrieve_config_management" {
