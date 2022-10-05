@@ -95,7 +95,7 @@ resource "ssh_resource" "other-servernodes" {
   private_key = local.ssh_key_server
   host        = local.servernodes[count.index + 1]
 
-    provisioner "local-exec" {
+  provisioner "local-exec" {
     interpreter = ["bash", "-c"]
     command     = "echo \"${count.index + 1}\" > initial_state.txt"
   }

@@ -26,6 +26,7 @@ No modules.
 | [null_resource.deploy-kubevip](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.deploy-rke2-server-config](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.deploy-rke2-worker-config](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.set_initial_state](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [random_pet.pet](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet) | resource |
 | [ssh_resource.deploy-first-servernode](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
 | [ssh_resource.install-agent-nodes](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
