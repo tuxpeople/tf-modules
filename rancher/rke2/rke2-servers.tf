@@ -55,9 +55,10 @@ resource "null_resource" "deploy-kubevip" {
 resource "ssh_resource" "deploy-first-servernode" {
   commands = [
     "curl -sfL https://get.rke2.io | sudo sh -",
+    "sleep 10",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
-    "sleep 60",
+    "sleep 10",
     "sudo /var/lib/rancher/rke2/bin/kubectl --insecure-skip-tls-verify --kubeconfig /etc/rancher/rke2/rke2.yaml wait --for=condition=Ready nodes --all --timeout=600s"
   ]
   user        = local.ssh_user_server
@@ -71,9 +72,10 @@ resource "ssh_resource" "other-servernodes" {
   commands = [
     "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/22\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
     "curl -sfL https://get.rke2.io | sudo sh -",
+    "sleep 10",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
-    "sleep 60",
+    "sleep 10",
     "sudo /var/lib/rancher/rke2/bin/kubectl --insecure-skip-tls-verify --kubeconfig /etc/rancher/rke2/rke2.yaml wait --for=condition=Ready nodes --all --timeout=600s"
   ]
   user        = local.ssh_user_server
