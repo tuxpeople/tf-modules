@@ -35,7 +35,7 @@ resource "ssh_resource" "install-agent-nodes" {
   }
   commands = [
     "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/9345\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
-    "if command -v rke2-uninstall.sh &> /dev/null; then /usr/bin/rke2-uninstall.sh; sleep 30; fi",
+    "if command -v rke2-uninstall.sh &> /dev/null; then sudo /var/lib/rancher/rke2/bin/kubectl --insecure-skip-tls-verify --kubeconfig /etc/rancher/rke2/rke2.yaml delete node ${local.agentnodes[count.index]};  sudo  /usr/bin/rke2-uninstall.sh; sleep 30; fi",
     "curl -sfL https://get.rke2.io | sudo INSTALL_RKE2_TYPE=\"agent\" sh -",
     "sudo systemctl enable rke2-agent.service",
     "sudo systemctl start rke2-agent.service",
