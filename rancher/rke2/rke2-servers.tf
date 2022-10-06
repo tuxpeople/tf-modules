@@ -53,7 +53,12 @@ resource "null_resource" "deploy-kubevip" {
 }
 
 resource "ssh_resource" "deploy-first-servernode" {
+  depends_on = [ null_resource.deploy-rke2-server-config]
+  triggers = {
+    config = null_resource.deploy-rke2-server-config.id
+  }
   commands = [
+    "if command -v rke2-uninstall.sh &> /dev/null; then /usr/bin/rke2-uninstall.sh; sleep 30; fi",
     "curl -sfL https://get.rke2.io | sudo sh -",
     "sleep 10",
     "sudo systemctl enable rke2-server.service",
@@ -67,6 +72,9 @@ resource "ssh_resource" "deploy-first-servernode" {
 }
 resource "null_resource" "set_initial_state" {
   depends_on = [ssh_resource.deploy-first-servernode]
+  triggers = {
+    config = null_resource.deploy-rke2-server-config.id
+  }
   provisioner "local-exec" {
     interpreter = ["bash", "-c"]
     command     = "echo \"0\" > initial_state.txt"
@@ -75,6 +83,9 @@ resource "null_resource" "set_initial_state" {
 resource "ssh_resource" "other-servernodes" {
   depends_on = [null_resource.set_initial_state]
   count      = local.servernode_amount - 1
+  triggers = {
+    config = null_resource.deploy-rke2-server-config.id
+  }
 
   provisioner "local-exec" {
     interpreter = ["bash", "-c"]
@@ -83,6 +94,7 @@ resource "ssh_resource" "other-servernodes" {
 
   commands = [
     "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/9345\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
+    "if command -v rke2-uninstall.sh &> /dev/null; then /usr/bin/rke2-uninstall.sh; sleep 30; fi",
     "curl -sfL https://get.rke2.io | sudo sh -",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
