@@ -30,11 +30,11 @@ resource "ssh_resource" "rke2_agent_config" {
   count = local.agentnode_amount
 
   triggers = {
-    template = template_file.rke2_agent_config[count.index]
+    template = data.template_file.rke2_agent_config[count.index]
   }
 
   file {
-    content     = template_file.rke2_agent_config[count.index]
+    content     = data.template_file.rke2_agent_config[count.index]
     destination = "/etc/rancher/rke2/config.yaml"
     permissions = "0644"
   }

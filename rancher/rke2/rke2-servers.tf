@@ -39,11 +39,11 @@ resource "ssh_resource" "rke2_server_config" {
   count = local.servernode_amount
 
   triggers = {
-    template = template_file.rke2_server_config[count.index]
+    template = data.template_file.rke2_server_config[count.index]
   }
 
   file {
-    content     = template_file.rke2_server_config[count.index]
+    content     = data.template_file.rke2_server_config[count.index]
     destination = "/etc/rancher/rke2/config.yaml"
     permissions = "0644"
   }
@@ -57,11 +57,11 @@ resource "ssh_resource" "deploy-kubevip" {
   count = local.deploy_kubevip == true ? 1 : 0
 
   triggers = {
-    template = template_file.kubevip_config[count.index]
+    template = data.template_file.kubevip_config[count.index]
   }
 
   file {
-    content     = template_file.kubevip_config[count.index]
+    content     = data.template_file.kubevip_config[count.index]
     destination = "/tmp/deploy-kubevip.sh"
     permissions = "0644"
   }
