@@ -85,7 +85,7 @@ resource "ssh_resource" "deploy-first-servernode" {
   }
 
   commands = [
-    "sleep 1m",
+    "sleep 60",
     "curl -sfL https://get.rke2.io | sudo INSTALL_RKE2_VERSION=\"${local.rke2_version}\" sh -",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
