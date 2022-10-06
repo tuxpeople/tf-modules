@@ -1,6 +1,8 @@
-resource "random_pet" "pet" {
-  length = 3
+resource "random_password" "cluster-token" {
+  length  = 50
+  special = false
 }
+
 locals {
   kubeconfig_path   = pathexpand(var.kubeconfig_path)
   vipip             = var.vip_address
@@ -15,5 +17,4 @@ locals {
   ssh_user_server   = var.ssh_user_server
   ssh_key_server    = file(pathexpand(var.ssh_key_server))
   network_interface = var.network_interface
-  token             = random_pet.pet.id
 }

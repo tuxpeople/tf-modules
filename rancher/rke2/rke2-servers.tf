@@ -1,101 +1,116 @@
-resource "null_resource" "deploy-rke2-server-config" {
-  count = local.servernode_amount
-  triggers = {
-    template = templatefile("${path.module}/files/rke2-conf.tftpl", {
-      MACHINENO = count.index
-      NODETYPE  = local.agentnode_amount >= "1" ? "masteronly" : "allinone"
-      TOKEN     = local.token
-      VIP       = local.vipip
-    FQDN = local.fqdn })
-  }
+resource "ssh_resource" "rke2_server_config_dir" {
+  count       = local.servernode_amount
+  host        = local.servernodes[count.index]
+  user        = local.ssh_user_server
+  private_key = local.ssh_key_server
+  commands = [
+    "sudo mkdir -p /etc/rancher/rke2",
+    "sudo chmod 777 /etc/rancher/rke2"
+  ]
+}
 
-  provisioner "file" {
-    content     = self.triggers.template
-    destination = "/tmp/config.yaml"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo mkdir -p /etc/rancher/rke2",
-      "sudo cp /tmp/config.yaml /etc/rancher/rke2/",
-    ]
-  }
-
-  connection {
-    type        = "ssh"
-    user        = local.ssh_user_server
-    private_key = local.ssh_key_server
-    host        = local.servernodes[count.index]
+data "template_file" "rke2_server_config" {
+  count    = local.servernode_amount
+  template = file("${path.module}/files/rke2-conf.tftpl")
+  vars = {
+    MACHINENO = count.index
+    NODETYPE  = local.agentnode_amount >= "1" ? "masteronly" : "allinone"
+    TOKEN     = random_password.cluster-token
+    VIP       = local.vipip
+    FQDN      = local.fqdn
   }
 }
 
-resource "null_resource" "deploy-kubevip" {
-  count = local.deploy_kubevip == true ? 1 : 0
+data "template_file" "kubevip_config" {
+  count    = local.deploy_kubevip == true ? 1 : 0
+  template = file("${path.module}/files/deploy-kubevip.tftpl")
+  vars = {
+    INTERFACE = local.network_interface
+    VIP       = local.vipip
+  }
+}
+
+resource "ssh_resource" "rke2_server_config" {
+  depends_on = [
+    ssh_resource.rke2_server_config_dir,
+    template_file.rke2_server_config
+  ]
+
+  count = local.servernode_amount
+
   triggers = {
-    template = templatefile("${path.module}/files/deploy-kubevip.tftpl", { INTERFACE = local.network_interface, VIP = local.vipip })
+    template = template_file.rke2_server_config[count.index]
   }
-  provisioner "file" {
-    content     = self.triggers.template
+
+  file {
+    content     = template_file.rke2_server_config[count.index]
+    destination = "/etc/rancher/rke2/config.yaml"
+    permissions = "0644"
+  }
+
+  user        = local.ssh_user_server
+  private_key = local.ssh_key_server
+  host        = local.servernodes.0
+}
+
+resource "ssh_resource" "deploy-kubevip" {
+  count = local.deploy_kubevip == true ? 1 : 0
+
+  triggers = {
+    template = template_file.kubevip_config[count.index]
+  }
+
+  file {
+    content     = template_file.kubevip_config[count.index]
     destination = "/tmp/deploy-kubevip.sh"
+    permissions = "0644"
   }
-  provisioner "remote-exec" {
-    inline = [
+
+  commands = [
       "chmod +x /tmp/deploy-kubevip.sh",
-      "sudo /tmp/deploy-kubevip.sh",
+      "sudo /tmp/deploy-kubevip.sh"
     ]
-  }
-  connection {
-    type        = "ssh"
-    user        = local.ssh_user_server
-    private_key = local.ssh_key_server
-    host        = local.servernodes.0
-  }
+
+  user        = local.ssh_user_server
+  private_key = local.ssh_key_server
+  host        = local.servernodes.0
 }
 
 resource "ssh_resource" "deploy-first-servernode" {
-  depends_on = [null_resource.deploy-rke2-server-config]
+  depends_on = [ssh_resource.rke2_first_server_config]
+
   triggers = {
-    config = replace(replace(jsonencode(null_resource.deploy-rke2-server-config.*.id), "\"", ""), ":", "=")
+    config = replace(replace(jsonencode(ssh_resource.rke2_first_server_confi.*.id), "\"", ""), ":", "=")
   }
+
   commands = [
-    "if command -v rke2-uninstall.sh &> /dev/null; then sudo /var/lib/rancher/rke2/bin/kubectl --insecure-skip-tls-verify --kubeconfig /etc/rancher/rke2/rke2.yaml delete node ${local.servernodes.0};  sudo  /usr/bin/rke2-uninstall.sh; sleep 30; fi",
+    # TODO INSTALL_RKE2_VERSION=${var.rke2_version}
     "curl -sfL https://get.rke2.io | sudo sh -",
-    "sleep 10",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
     "sleep 10",
     "sudo /var/lib/rancher/rke2/bin/kubectl --insecure-skip-tls-verify --kubeconfig /etc/rancher/rke2/rke2.yaml wait --for=condition=Ready nodes --all --timeout=600s"
   ]
+
   user        = local.ssh_user_server
   private_key = local.ssh_key_server
   host        = local.servernodes.0
 }
-resource "null_resource" "set_initial_state" {
-  depends_on = [ssh_resource.deploy-first-servernode]
-  triggers = {
-    config = replace(replace(jsonencode(null_resource.deploy-rke2-server-config.*.id), "\"", ""), ":", "=")
-  }
-  provisioner "local-exec" {
-    interpreter = ["bash", "-c"]
-    command     = "echo \"0\" > initial_state.txt"
-  }
-}
-resource "ssh_resource" "other-servernodes" {
-  depends_on = [null_resource.set_initial_state]
-  count      = local.servernode_amount - 1
-  triggers = {
-    config = replace(replace(jsonencode(null_resource.deploy-rke2-server-config.*.id), "\"", ""), ":", "=")
-  }
 
-  provisioner "local-exec" {
-    interpreter = ["bash", "-c"]
-    command     = "while [[ $(cat initial_state.txt) != \"${count.index}\" ]]; do echo \"${count.index} is asleep...\";((c++)) && ((c==180)) && break;sleep 15;done"
+resource "ssh_resource" "deploy-other-servernodes" {
+  depends_on = [ssh_resource.deploy-first-servernode, ssh_resource.rke2_server_config]
+
+  count      = local.servernode_amount - 1
+
+  triggers = {
+    config = replace(replace(jsonencode(ssh_resource.rke2_first_server_confi.*.id), "\"", ""), ":", "=")
   }
 
   commands = [
     "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/9345\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
-    "if command -v rke2-uninstall.sh &> /dev/null; then sudo /var/lib/rancher/rke2/bin/kubectl --insecure-skip-tls-verify --kubeconfig /etc/rancher/rke2/rke2.yaml delete node ${local.servernodes[count.index + 1]};  sudo /usr/bin/rke2-uninstall.sh; sleep 30; fi",
+    # TODO INSTALL_RKE2_VERSION=${var.rke2_version}
     "curl -sfL https://get.rke2.io | sudo sh -",
+    "sleep ${count.index}m",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
     "sleep 10",
@@ -104,24 +119,21 @@ resource "ssh_resource" "other-servernodes" {
   user        = local.ssh_user_server
   private_key = local.ssh_key_server
   host        = local.servernodes[count.index + 1]
-
-  provisioner "local-exec" {
-    interpreter = ["bash", "-c"]
-    command     = "echo \"${count.index + 1}\" > initial_state.txt"
-  }
 }
 
 resource "ssh_resource" "retrieve_config_management" {
-  depends_on = [
-    ssh_resource.deploy-first-servernode
-  ]
+  depends_on = [ssh_resource.deploy-first-servernode]
+
   triggers = {
-    config = replace(replace(jsonencode(null_resource.deploy-rke2-server-config.*.id), "\"", ""), ":", "=")
+    config = replace(replace(jsonencode(ssh_resource.rke2_first_server_confi.*.id), "\"", ""), ":", "=")
   }
+
   host = local.servernodes.0
+
   commands = [
     "sleep 60 && sudo sed \"s/127.0.0.1/${local.fqdn}/g\" /etc/rancher/rke2/rke2.yaml"
   ]
+
   user        = local.ssh_user_server
   private_key = local.ssh_key_server
 }
