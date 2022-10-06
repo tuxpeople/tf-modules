@@ -51,3 +51,8 @@ variable "network_interface" {
   type        = string
   default     = "ens192"
 }
+variable "rke2_channel" {
+  description = "Which RKE2 release channel to use, will install latest version from this channel. Possible values include `latest`, `stable`, `testing`, `v1.25` etc. (see https://github.com/rancher/rke2/blob/master/channels.yaml, defaults to: `stable`)"
+  type        = string
+  default     = "stable"
+}
