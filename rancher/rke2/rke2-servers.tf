@@ -55,7 +55,7 @@ resource "null_resource" "deploy-kubevip" {
 resource "ssh_resource" "deploy-first-servernode" {
   depends_on = [null_resource.deploy-rke2-server-config]
   triggers = {
-    config = null_resource.deploy-rke2-server-config.id
+    config = null_resource.deploy-rke2-server-config.*.id
   }
   commands = [
     "if command -v rke2-uninstall.sh &> /dev/null; then /usr/bin/rke2-uninstall.sh; sleep 30; fi",
@@ -73,7 +73,7 @@ resource "ssh_resource" "deploy-first-servernode" {
 resource "null_resource" "set_initial_state" {
   depends_on = [ssh_resource.deploy-first-servernode]
   triggers = {
-    config = null_resource.deploy-rke2-server-config.id
+    config = null_resource.deploy-rke2-server-config.*.id
   }
   provisioner "local-exec" {
     interpreter = ["bash", "-c"]
@@ -84,7 +84,7 @@ resource "ssh_resource" "other-servernodes" {
   depends_on = [null_resource.set_initial_state]
   count      = local.servernode_amount - 1
   triggers = {
-    config = null_resource.deploy-rke2-server-config.id
+    config = null_resource.deploy-rke2-server-config.*.id
   }
 
   provisioner "local-exec" {
