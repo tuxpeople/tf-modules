@@ -102,6 +102,11 @@ resource "vsphere_virtual_machine" "main" {
     host    = self.default_ip_address
     timeout = "10m"
   }
+
+  provisioner "local-exec" {
+    command = "sleep 30"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "echo 'Waiting for user data script to finish'",
