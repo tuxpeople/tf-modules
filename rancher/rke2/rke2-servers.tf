@@ -27,6 +27,7 @@ data "template_file" "kubevip_config" {
   vars = {
     INTERFACE = local.network_interface
     VIP       = local.vipip
+    VERSION = kubevip_available_versions[0]
   }
 }
 
