@@ -24,7 +24,7 @@ data "template_file" "rke2_agent_config" {
 resource "ssh_resource" "rke2_agent_config" {
   depends_on = [
     ssh_resource.rke2_agent_config_dir,
-    template_file.rke2_agent_config
+    data.template_file.rke2_agent_config
   ]
 
   count = local.agentnode_amount

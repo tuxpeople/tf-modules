@@ -33,7 +33,7 @@ data "template_file" "kubevip_config" {
 resource "ssh_resource" "rke2_server_config" {
   depends_on = [
     ssh_resource.rke2_server_config_dir,
-    template_file.rke2_server_config
+    data.template_file.rke2_server_config
   ]
 
   count = local.servernode_amount
