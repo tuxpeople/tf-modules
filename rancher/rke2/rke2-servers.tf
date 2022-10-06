@@ -15,7 +15,7 @@ data "template_file" "rke2_server_config" {
   vars = {
     MACHINENO = count.index
     NODETYPE  = local.agentnode_amount >= "1" ? "masteronly" : "allinone"
-    TOKEN     = random_password.cluster-token
+    TOKEN     = random_password.cluster-token.result
     VIP       = local.vipip
     FQDN      = local.fqdn
   }

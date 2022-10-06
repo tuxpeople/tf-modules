@@ -15,7 +15,7 @@ data "template_file" "rke2_agent_config" {
   vars = {
       MACHINENO = count.index + 1
       NODETYPE  = "worker"
-      TOKEN     = random_password.cluster-token
+      TOKEN     = random_password.cluster-token.result
       VIP       = local.vipip
       FQDN      = local.fqdn
   }
