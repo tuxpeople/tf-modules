@@ -55,7 +55,7 @@ resource "ssh_resource" "install-agent-nodes" {
 
   commands = [
     "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/9345\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
-    "curl -sfL https://get.rke2.io | sudo INSTALL_RKE2_TYPE=\"agent\" INSTALL_RKE2_VERSION=\"${local.rke2_version}\" sh -",
+    "curl -sfL https://get.rke2.io | sudo INSTALL_RKE2_TYPE=\"agent\" INSTALL_RKE2_CHANNEL=\"${var.rke2_channel}\" sh -",
     "sudo systemctl enable rke2-agent.service",
     "sudo systemctl start rke2-agent.service",
   ]
