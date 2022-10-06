@@ -77,10 +77,10 @@ resource "ssh_resource" "deploy-kubevip" {
 }
 
 resource "ssh_resource" "deploy-first-servernode" {
-  depends_on = [ssh_resource.rke2_first_server_config]
+  depends_on = [ssh_resource.rke2_server_config]
 
   triggers = {
-    config = replace(replace(jsonencode(ssh_resource.rke2_first_server_config.*.id), "\"", ""), ":", "=")
+    config = replace(replace(jsonencode(ssh_resource.rke2_server_config.*.id), "\"", ""), ":", "=")
   }
 
   commands = [
@@ -103,7 +103,7 @@ resource "ssh_resource" "deploy-other-servernodes" {
   count      = local.servernode_amount - 1
 
   triggers = {
-    config = replace(replace(jsonencode(ssh_resource.rke2_first_server_config.*.id), "\"", ""), ":", "=")
+    config = replace(replace(jsonencode(ssh_resource.rke2_server_config.*.id), "\"", ""), ":", "=")
   }
 
   commands = [
@@ -125,7 +125,7 @@ resource "ssh_resource" "retrieve_config_management" {
   depends_on = [ssh_resource.deploy-first-servernode]
 
   triggers = {
-    config = replace(replace(jsonencode(ssh_resource.rke2_first_server_config.*.id), "\"", ""), ":", "=")
+    config = replace(replace(jsonencode(ssh_resource.rke2_server_config.*.id), "\"", ""), ":", "=")
   }
 
   host = local.servernodes.0
