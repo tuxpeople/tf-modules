@@ -1,8 +1,8 @@
 resource "ssh_resource" "rke2_agent_config_dir" {
-  count = local.agentnode_amount
-    host        = local.agentnodes[count.index]
-    user        = local.ssh_user_agent
-    private_key = local.ssh_key_agent
+  count       = local.agentnode_amount
+  host        = local.agentnodes[count.index]
+  user        = local.ssh_user_agent
+  private_key = local.ssh_key_agent
   commands = [
     "sudo mkdir -p /etc/rancher/rke2",
     "sudo chmod 777 /etc/rancher/rke2"
@@ -10,14 +10,14 @@ resource "ssh_resource" "rke2_agent_config_dir" {
 }
 
 data "template_file" "rke2_agent_config" {
-  count = local.agentnode_amount
+  count    = local.agentnode_amount
   template = file("${path.module}/files/rke2-conf.tftpl")
   vars = {
-      MACHINENO = count.index + 1
-      NODETYPE  = "worker"
-      TOKEN     = random_password.cluster-token.result
-      VIP       = local.vipip
-      FQDN      = local.fqdn
+    MACHINENO = count.index + 1
+    NODETYPE  = "worker"
+    TOKEN     = random_password.cluster-token.result
+    VIP       = local.vipip
+    FQDN      = local.fqdn
   }
 }
 
@@ -47,7 +47,7 @@ resource "ssh_resource" "rke2_agent_config" {
 resource "ssh_resource" "install-agent-nodes" {
   depends_on = [ssh_resource.deploy-first-servernode]
 
-  count      = local.agentnode_amount
+  count = local.agentnode_amount
 
   triggers = {
     config = replace(replace(jsonencode(ssh_resource.rke2_agent_config.*.id), "\"", ""), ":", "=")

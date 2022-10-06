@@ -10,9 +10,9 @@
 | Name | Version |
 |------|---------|
 | <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_null"></a> [null](#provider\_null) | n/a |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 | <a name="provider_ssh"></a> [ssh](#provider\_ssh) | 2.2.1 |
+| <a name="provider_template"></a> [template](#provider\_template) | n/a |
 
 ## Modules
 
@@ -23,15 +23,19 @@ No modules.
 | Name | Type |
 |------|------|
 | [local_file.kubeconfig](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [null_resource.deploy-kubevip](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.deploy-rke2-server-config](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.deploy-rke2-worker-config](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.set_initial_state](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [random_pet.pet](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet) | resource |
+| [random_password.cluster-token](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [ssh_resource.deploy-first-servernode](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
+| [ssh_resource.deploy-kubevip](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
+| [ssh_resource.deploy-other-servernodes](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
 | [ssh_resource.install-agent-nodes](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
-| [ssh_resource.other-servernodes](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
 | [ssh_resource.retrieve_config_management](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
+| [ssh_resource.rke2_agent_config](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
+| [ssh_resource.rke2_agent_config_dir](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
+| [ssh_resource.rke2_server_config](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
+| [ssh_resource.rke2_server_config_dir](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
+| [template_file.kubevip_config](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
+| [template_file.rke2_agent_config](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
+| [template_file.rke2_server_config](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 
 ## Inputs
 

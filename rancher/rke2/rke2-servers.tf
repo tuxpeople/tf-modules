@@ -54,7 +54,7 @@ resource "ssh_resource" "rke2_server_config" {
 }
 
 resource "ssh_resource" "deploy-kubevip" {
-  count    = local.deploy_kubevip == true ? 1 : 0
+  count = local.deploy_kubevip == true ? 1 : 0
 
   triggers = {
     template = data.template_file.kubevip_config[count.index]
@@ -67,9 +67,9 @@ resource "ssh_resource" "deploy-kubevip" {
   }
 
   commands = [
-      "chmod +x /tmp/deploy-kubevip.sh",
-      "sudo /tmp/deploy-kubevip.sh"
-    ]
+    "chmod +x /tmp/deploy-kubevip.sh",
+    "sudo /tmp/deploy-kubevip.sh"
+  ]
 
   user        = local.ssh_user_server
   private_key = local.ssh_key_server
@@ -100,7 +100,7 @@ resource "ssh_resource" "deploy-first-servernode" {
 resource "ssh_resource" "deploy-other-servernodes" {
   depends_on = [ssh_resource.deploy-first-servernode, ssh_resource.rke2_server_config]
 
-  count      = local.servernode_amount - 1
+  count = local.servernode_amount - 1
 
   triggers = {
     config = replace(replace(jsonencode(ssh_resource.rke2_server_config.*.id), "\"", ""), ":", "=")
