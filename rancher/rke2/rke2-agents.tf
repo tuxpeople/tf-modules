@@ -31,7 +31,7 @@ resource "ssh_resource" "install-agent-nodes" {
   depends_on = [ssh_resource.deploy-first-servernode]
   count      = local.agentnode_amount
   triggers = {
-    config = null_resource.deploy-rke2-worker-config.id
+    config = null_resource.deploy-rke2-worker-config.*.id
   }
   commands = [
     "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/9345\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
