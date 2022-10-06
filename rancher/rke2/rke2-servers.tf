@@ -54,7 +54,7 @@ resource "ssh_resource" "rke2_server_config" {
 }
 
 resource "ssh_resource" "deploy-kubevip" {
-  count = local.deploy_kubevip == true ? 1 : 0
+  count    = local.deploy_kubevip == true ? 1 : 0
 
   triggers = {
     template = data.template_file.kubevip_config[count.index]
