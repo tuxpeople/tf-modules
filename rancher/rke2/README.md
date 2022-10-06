@@ -37,7 +37,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_agentnodes"></a> [agentnodes](#input\_agentnodes) | Map of IP addresses of the server nodes. (Defaults to: `{}`). If empty, all server nodes will also be agent nodes | `list(string)` | `[]` | no |
+| <a name="input_agentnodes"></a> [agentnodes](#input\_agentnodes) | Map of IP addresses of the server nodes. (Defaults to: `[]`). If empty, all server nodes will also be agent nodes | `list(string)` | `[]` | no |
 | <a name="input_kube_vip"></a> [kube\_vip](#input\_kube\_vip) | Wether or not kube\_vip should be deployed. (Defaults to: `true`) | `bool` | `true` | no |
 | <a name="input_kubeconfig_path"></a> [kubeconfig\_path](#input\_kubeconfig\_path) | Path where the kubeconfig should be written to (Defaults to: `~/kube_config.yaml`) | `string` | `"~/kube_config.yaml"` | no |
 | <a name="input_network_interface"></a> [network\_interface](#input\_network\_interface) | Network interface for kube\_vip (Defaults to `ens192`) | `string` | `"ens192"` | no |

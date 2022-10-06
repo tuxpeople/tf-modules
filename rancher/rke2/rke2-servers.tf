@@ -53,7 +53,7 @@ resource "null_resource" "deploy-kubevip" {
 }
 
 resource "ssh_resource" "deploy-first-servernode" {
-  depends_on = [ null_resource.deploy-rke2-server-config]
+  depends_on = [null_resource.deploy-rke2-server-config]
   triggers = {
     config = null_resource.deploy-rke2-server-config.id
   }
