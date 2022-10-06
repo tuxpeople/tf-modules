@@ -31,7 +31,7 @@ resource "ssh_resource" "install-agent-nodes" {
   depends_on = [ssh_resource.deploy-first-servernode]
   count      = local.agentnode_amount
   commands = [
-    "sleep 30",
+    "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/9345\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
     "curl -sfL https://get.rke2.io | sudo sh -",
     "sudo systemctl enable rke2-agent.service",
     "sudo systemctl start rke2-agent.service",
