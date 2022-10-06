@@ -34,6 +34,7 @@ No modules.
 | [ssh_resource.rke2_agent_config_dir](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
 | [ssh_resource.rke2_server_config](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
 | [ssh_resource.rke2_server_config_dir](https://registry.terraform.io/providers/loafoe/ssh/2.2.1/docs/resources/resource) | resource |
+| [http_http.kubevip_available_versions](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
 | [http_http.rke2_channels](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
 | [template_file.kubevip_config](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 | [template_file.rke2_agent_config](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
