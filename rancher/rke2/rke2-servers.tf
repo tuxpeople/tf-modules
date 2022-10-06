@@ -115,6 +115,9 @@ resource "ssh_resource" "retrieve_config_management" {
   depends_on = [
     ssh_resource.deploy-first-servernode
   ]
+  triggers = {
+    config = replace(replace(jsonencode(null_resource.deploy-rke2-server-config.*.id), "\"", ""), ":", "=")
+  }
   host = local.servernodes.0
   commands = [
     "sleep 60 && sudo sed \"s/127.0.0.1/${local.fqdn}/g\" /etc/rancher/rke2/rke2.yaml"
