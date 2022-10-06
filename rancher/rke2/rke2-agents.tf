@@ -50,7 +50,7 @@ resource "ssh_resource" "install-agent-nodes" {
   count      = local.agentnode_amount
 
   triggers = {
-    config = replace(replace(jsonencode(null_resource.deploy-rke2-worker-config.*.id), "\"", ""), ":", "=")
+    config = replace(replace(jsonencode(ssh_resource.rke2_agent_config.*.id), "\"", ""), ":", "=")
   }
 
   commands = [
