@@ -8,7 +8,7 @@ variable "servernodes" {
   }
 }
 variable "agentnodes" {
-  description = "Map of IP addresses of the server nodes. (Defaults to: `{}`). If empty, all server nodes will also be agent nodes"
+  description = "Map of IP addresses of the server nodes. (Defaults to: `[]`). If empty, all server nodes will also be agent nodes"
   type        = list(string)
   default     = []
 }
