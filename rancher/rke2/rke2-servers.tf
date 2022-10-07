@@ -86,7 +86,7 @@ resource "ssh_resource" "deploy-first-servernode" {
 
   commands = [
     "sleep 60",
-    "curl -sfL https://get.rke2.io | sudo INSTALL_RKE2_CHANNEL=${var.rke2_channel} sh -",
+    "sudo bash -c 'curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=${var.rke2_channel} sh -'",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
     "sleep 10",
@@ -109,7 +109,7 @@ resource "ssh_resource" "deploy-other-servernodes" {
 
   commands = [
     "while ! timeout 1 bash -c \"cat < /dev/null > /dev/tcp/${local.fqdn}/9345\"; do echo \"Waiting for Kubernetes API to become ready\"; sleep 5; done",
-    "curl -sfL https://get.rke2.io | sudo INSTALL_RKE2_CHANNEL=${var.rke2_channel} sh -",
+    "sudo bash -c 'curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=${var.rke2_channel} sh -'",
     "sleep ${count.index}m",
     "sudo systemctl enable rke2-server.service",
     "sudo systemctl start rke2-server.service",
