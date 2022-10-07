@@ -51,7 +51,7 @@ resource "ssh_resource" "rke2_server_config" {
 
   user        = local.ssh_user_server
   private_key = local.ssh_key_server
-  host        = local.servernodes.0
+  host        = local.servernodes[count.index]
 }
 
 resource "ssh_resource" "deploy-kubevip" {
