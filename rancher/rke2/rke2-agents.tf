@@ -41,7 +41,7 @@ resource "ssh_resource" "rke2_agent_config" {
 
   user        = local.ssh_user_agent
   private_key = local.ssh_key_agent
-  host        = local.agentnodes.0
+  host        = local.agentnodes[count.index]
 }
 
 resource "ssh_resource" "install-agent-nodes" {
