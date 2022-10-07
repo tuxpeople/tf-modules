@@ -5,8 +5,6 @@ resource "null_resource" "wait_kubeconfig" {
   }
 }
 
-var.kubeconfig_path
-
 # Install cert-manager helm chart
 resource "helm_release" "cert_manager" {
   depends_on      = [null_resource.wait_kubeconfig]
