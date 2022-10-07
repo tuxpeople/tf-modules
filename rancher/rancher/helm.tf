@@ -7,7 +7,7 @@ resource "null_resource" "wait_kubeconfig" {
 
 # Install cert-manager helm chart
 resource "helm_release" "cert_manager" {
-  depends_on      = [null_resource.wait_kubeconfig]
+  depends_on       = [null_resource.wait_kubeconfig]
   name             = "cert-manager"
   chart            = "https://charts.jetstack.io/charts/cert-manager-v${var.cert_manager_version}.tgz"
   namespace        = "cert-manager"
