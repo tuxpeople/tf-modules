@@ -61,4 +61,5 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_cluster_token"></a> [cluster\_token](#output\_cluster\_token) | Map of latest RKE2 releases per channel. |
+| <a name="output_kubeconfig_path"></a> [kubeconfig\_path](#output\_kubeconfig\_path) | Path of the kubeconfig |
 <!-- END_TF_DOCS -->
