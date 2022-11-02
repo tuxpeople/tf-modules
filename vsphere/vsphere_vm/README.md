@@ -28,6 +28,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_check_cloudinit_success"></a> [check\_cloudinit\_success](#input\_check\_cloudinit\_success) | Wait for cloudinit's success (Defaults to: true) | `bool` | `true` | no |
 | <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster where the VMs should be placed (Defaults to: Homelab) | `string` | `"Homelab"` | no |
 | <a name="input_datacenter"></a> [datacenter](#input\_datacenter) | Datacenter where the VMs should be placed (Defaults to: SKY) | `string` | `"SKY"` | no |
 | <a name="input_datastore"></a> [datastore](#input\_datastore) | Datastore where the VMs should be placed (must exist) | `string` | n/a | yes |
