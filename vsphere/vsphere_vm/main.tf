@@ -112,7 +112,6 @@ resource "vsphere_virtual_machine" "main" {
       "echo 'Waiting for user data script to finish'",
       "cloud-init status --wait > /dev/null"
     ]
-    on_failure = var.check_cloudinit_success == true ? fail : continue
   }
 
   /* provisioner "local-exec" {

@@ -96,9 +96,3 @@ variable "domain" {
   type        = string
   default     = "lab.tdeutsch.ch"
 }
-
-variable "check_cloudinit_success" {
-  description = "Wait for cloudinit's success (Defaults to: true)"
-  type        = bool
-  default     = true
-}
