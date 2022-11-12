@@ -48,7 +48,7 @@ resource "vsphere_virtual_machine" "main" {
   }
 
   network_interface {
-    network_id = data.vsphere_network.main[count.index].id
+    network_id = (var.remote_ovf_url == "" ? data.vsphere_network.main[count.index].id : null)
   }
   ovf_deploy {
     allow_unverified_ssl_cert = (var.remote_ovf_url == "" ? null : false)
@@ -62,7 +62,7 @@ resource "vsphere_virtual_machine" "main" {
   }
 
   clone {
-    template_uuid = (var.remote_ovf_url == "" ? data.vsphere_virtual_machine.template[count.index].id : null)
+    template_uuid = data.vsphere_virtual_machine.template[count.index].id
   }
 
   /* vapp {
