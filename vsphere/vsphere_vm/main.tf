@@ -48,11 +48,11 @@ resource "vsphere_virtual_machine" "main" {
   }
 
   network_interface {
-    network_id = (var.remote_ovf_url == "" ? data.vsphere_network.main[count.index].id : NULL)
+    network_id = (var.remote_ovf_url == "" ? data.vsphere_network.main[count.index].id : null)
   }
   ovf_deploy {
-    allow_unverified_ssl_cert = (var.remote_ovf_url == "" ? NULL : false)
-    remote_ovf_url            = (var.remote_ovf_url == "" ? NULL : var.remote_ovf_url)
+    allow_unverified_ssl_cert = (var.remote_ovf_url == "" ? null : false)
+    remote_ovf_url            = (var.remote_ovf_url == "" ? null : var.remote_ovf_url)
   }
   disk {
     label            = "disk0"
