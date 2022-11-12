@@ -41,7 +41,7 @@ resource "vsphere_virtual_machine" "main" {
   name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
   num_cpus = var.vCPU
   memory   = var.vMEM
-  guest_id = data.vsphere_virtual_machine.template[count.index].guest_id
+  guest_id = (var.remote_ovf_url == "" ? data.vsphere_virtual_machine.template[count.index].guest_id : null)
 
   cdrom {
     client_device = true
