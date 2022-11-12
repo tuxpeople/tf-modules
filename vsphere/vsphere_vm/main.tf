@@ -97,10 +97,10 @@ resource "vsphere_virtual_machine" "main" {
   wait_for_guest_net_timeout  = var.wait_for_guest_net_timeout
 
   connection {
-    type    = "ssh"
-    user    = "ansible"
-    host    = self.default_ip_address
-    timeout = "10m"
+    type        = "ssh"
+    user        = "ansible"
+    host        = self.default_ip_address
+    timeout     = "10m"
     private_key = var.ssh_private_keyfile
   }
 
