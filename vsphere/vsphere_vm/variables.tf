@@ -96,3 +96,9 @@ variable "domain" {
   type        = string
   default     = "lab.tdeutsch.ch"
 }
+
+variable "remote_ovf_url" {
+  description = "URL for ovf/ova (Empty by default)"
+  type        = string
+  default     = ""
+}

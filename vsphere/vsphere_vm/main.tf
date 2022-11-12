@@ -26,7 +26,7 @@ data "vsphere_network" "main" {
 }
 
 data "vsphere_virtual_machine" "template" {
-  count         = var.instances_count
+  count         = (var.remote_ovf_url == "" ? var.instances_count : "0")
   name          = var.template
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
@@ -48,9 +48,12 @@ resource "vsphere_virtual_machine" "main" {
   }
 
   network_interface {
-    network_id = data.vsphere_network.main[count.index].id
+    network_id = (var.remote_ovf_url == "" ? data.vsphere_network.main[count.index].id : NULL)
   }
-
+  ovf_deploy {
+    allow_unverified_ssl_cert = (var.remote_ovf_url == "" ? NULL : false)
+    remote_ovf_url            = (var.remote_ovf_url == "" ? NULL : var.remote_ovf_url)
+  }
   disk {
     label            = "disk0"
     size             = var.disksize
