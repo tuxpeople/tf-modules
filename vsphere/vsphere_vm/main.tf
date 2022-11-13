@@ -101,7 +101,7 @@ resource "vsphere_virtual_machine" "main" {
     user        = "ansible"
     host        = self.default_ip_address
     timeout     = "10m"
-    private_key = file(pathexpand(var.ssh_private_keyfile))
+    private_key = (var.ssh_private_keyfile == "" ? null : file(pathexpand(var.ssh_private_keyfile)))
   }
 
   provisioner "local-exec" {
