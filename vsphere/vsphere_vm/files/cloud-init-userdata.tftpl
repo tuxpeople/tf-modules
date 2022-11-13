@@ -25,7 +25,6 @@ packages:
   - open-vm-tools
   - sudo
   - python3
-  - acl
 
 users:
   - name: ansible
@@ -49,3 +48,4 @@ runcmd:
   - subscription-manager remove --all
   - subscription-manager unregister
 %{ endif }
+  - command -v apt >/dev/null 2>&1 && { sudo apt -y install acl; }
