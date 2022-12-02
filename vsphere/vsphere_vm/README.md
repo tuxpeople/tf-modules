@@ -19,8 +19,6 @@ No modules.
 |------|------|
 | [vsphere_virtual_machine.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/resources/virtual_machine) | resource |
 | [vsphere_compute_cluster.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/compute_cluster) | data source |
-| [vsphere_content_library.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/content_library) | data source |
-| [vsphere_content_library_item.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/content_library_item) | data source |
 | [vsphere_datacenter.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/datacenter) | data source |
 | [vsphere_datastore.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/datastore) | data source |
 | [vsphere_network.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/network) | data source |
@@ -31,7 +29,6 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster where the VMs should be placed (Defaults to: Homelab) | `string` | `"Homelab"` | no |
-| <a name="input_content_library"></a> [content\_library](#input\_content\_library) | Name of the content library where the OVF template is stored. | `string` | `null` | no |
 | <a name="input_datacenter"></a> [datacenter](#input\_datacenter) | Datacenter where the VMs should be placed (Defaults to: SKY) | `string` | `"SKY"` | no |
 | <a name="input_datastore"></a> [datastore](#input\_datastore) | Datastore where the VMs should be placed (must exist) | `string` | n/a | yes |
 | <a name="input_disksize"></a> [disksize](#input\_disksize) | Disksize in GB | `number` | n/a | yes |
