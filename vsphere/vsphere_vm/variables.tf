@@ -82,9 +82,9 @@ variable "ssh_public_keyfile" {
   default     = "~/.ssh/id_rsa.pub"
 }
 variable "ssh_private_keyfile" {
-  description = "SSH private keyfile for the VMs (Default: empty)"
+  description = "SSH private keyfile for the VMs (Default: ~/.ssh/id_rsa)"
   type        = string
-  default     = ""
+  default     = "~/.ssh/id_rsa"
 }
 variable "wait_for_guest_net_routable" {
   description = "Controls whether or not the guest network waiter waits for a routable address. (Defaults to: true)"
