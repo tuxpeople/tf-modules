@@ -38,7 +38,7 @@ data "vsphere_content_library_item" "main" {
 }
 
 data "vsphere_virtual_machine" "template" {
-  count         = var.content_library != null ? 0 : 1
+  count         = var.instances_count
   name          = var.template
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
@@ -53,7 +53,7 @@ resource "vsphere_virtual_machine" "main" {
   name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
   num_cpus = var.vCPU
   memory   = var.vMEM
-  # guest_id = data.vsphere_virtual_machine.template[0].guest_id
+  guest_id = data.vsphere_virtual_machine.template[count.index].guest_id
 
   cdrom {
     client_device = true
@@ -71,7 +71,7 @@ resource "vsphere_virtual_machine" "main" {
   }
 
   clone {
-    template_uuid = var.content_library == null ? data.vsphere_virtual_machine.template[0].id : data.vsphere_content_library_item.main[0].id
+    template_uuid = var.content_library == null ? data.vsphere_virtual_machine.template[count.index].id : data.vsphere_content_library_item.main[0].id
   }
 
   /* vapp {
