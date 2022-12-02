@@ -25,18 +25,6 @@ data "vsphere_network" "main" {
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
 
-data "vsphere_content_library" "main" {
-  count = var.content_library != null ? 1 : 0
-  name  = var.content_library
-}
-
-data "vsphere_content_library_item" "main" {
-  count      = var.content_library != null ? 1 : 0
-  library_id = data.vsphere_content_library.library[0].id
-  type       = "ovf"
-  name       = var.template
-}
-
 data "vsphere_virtual_machine" "template" {
   count         = var.instances_count
   name          = var.template
@@ -71,7 +59,7 @@ resource "vsphere_virtual_machine" "main" {
   }
 
   clone {
-    template_uuid = var.content_library == null ? data.vsphere_virtual_machine.template[count.index].id : data.vsphere_content_library_item.library_item_template[0].id
+    template_uuid = data.vsphere_virtual_machine.template[count.index].id
   }
 
   /* vapp {
