@@ -114,7 +114,7 @@ resource "vsphere_virtual_machine" "main" {
     host        = self.default_ip_address
     timeout     = "10m"
     private_key = (var.ssh_private_keyfile == "" ? null : file(pathexpand(var.ssh_private_keyfile)))
-    agent = false
+    agent       = false
   }
 
   provisioner "local-exec" {
