@@ -96,3 +96,7 @@ variable "domain" {
   type        = string
   default     = "lab.tdeutsch.ch"
 }
+variable "content_library" {
+  description = "Name of the content library where the OVF template is stored."
+  default     = null
+}
