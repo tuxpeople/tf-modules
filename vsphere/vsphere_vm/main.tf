@@ -26,8 +26,8 @@ data "vsphere_network" "main" {
 }
 
 data "vsphere_content_library" "main" {
-  count      = var.content_library != null ? 1 : 0
-  name       = var.content_library
+  count = var.content_library != null ? 1 : 0
+  name  = var.content_library
 }
 
 data "vsphere_content_library_item" "main" {

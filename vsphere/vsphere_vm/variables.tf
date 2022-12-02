@@ -103,6 +103,6 @@ variable "domain" {
 }
 variable "content_library" {
   description = "Name of the content library where the OVF template is stored."
-  type = string
+  type        = string
   default     = null
 }
