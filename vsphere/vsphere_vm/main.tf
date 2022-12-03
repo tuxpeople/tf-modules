@@ -123,6 +123,14 @@ resource "vsphere_virtual_machine" "main" {
   provisioner "local-exec" {
     command = "ssh-keygen -R ${self.default_ip_address}; ssh-keygen -R ${self.name}; ssh-keyscan -t rsa ${self.default_ip_address},${self.name} >> ~/.ssh/known_hosts"
   }
+  lifecycle {
+    ignore_changes = [
+      disk[0].io_share_count,
+      disk[0].thin_provisioned,
+      disk[1].io_share_count,
+      disk[1].io_share_count
+    ]
+  }
 }
 
 /* resource "null_resource" "cleanup_ssh_keys" {
