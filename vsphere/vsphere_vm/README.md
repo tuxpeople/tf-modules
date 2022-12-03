@@ -21,6 +21,7 @@ No modules.
 | [vsphere_compute_cluster.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/compute_cluster) | data source |
 | [vsphere_datacenter.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/datacenter) | data source |
 | [vsphere_datastore.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/datastore) | data source |
+| [vsphere_host.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/host) | data source |
 | [vsphere_network.main](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/network) | data source |
 | [vsphere_virtual_machine.template](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/data-sources/virtual_machine) | data source |
 
@@ -39,6 +40,7 @@ No modules.
 | <a name="input_hostname"></a> [hostname](#input\_hostname) | Hostname of the VM, will be appended with a number depending on how many VMs beeing created. | `string` | n/a | yes |
 | <a name="input_instances_count"></a> [instances\_count](#input\_instances\_count) | How many of those VM instances? (Default: 1) | `string` | `"1"` | no |
 | <a name="input_network"></a> [network](#input\_network) | Network which the VM should be connected to (must exist) | `string` | n/a | yes |
+| <a name="input_ovf_url"></a> [ovf\_url](#input\_ovf\_url) | OVF URL | `string` | `""` | no |
 | <a name="input_redhat_password"></a> [redhat\_password](#input\_redhat\_password) | Password to subscribe a RHEL system to RedHat (used when guest\_id == rhel8\_64Guest) | `string` | `""` | no |
 | <a name="input_redhat_username"></a> [redhat\_username](#input\_redhat\_username) | Username to subscribe a RHEL system to RedHat (used when guest\_id == rhel8\_64Guest) | `string` | `""` | no |
 | <a name="input_ssh_private_keyfile"></a> [ssh\_private\_keyfile](#input\_ssh\_private\_keyfile) | SSH private keyfile for the VMs (Default: ~/.ssh/id\_rsa) | `string` | `"~/.ssh/id_rsa"` | no |

@@ -26,13 +26,13 @@ data "vsphere_network" "main" {
 }
 
 data "vsphere_host" "main" {
-  count         = local.talos_ovf_url != "" ? 1 : 0 
+  count         = local.talos_ovf_url != "" ? 1 : 0
   name          = var.vsphere_host
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
 
 data "vsphere_virtual_machine" "template" {
-  count         = local.talos_ovf_url != "" ? 0 : 1 
+  count         = local.talos_ovf_url != "" ? 0 : 1
   name          = var.template
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
@@ -68,9 +68,9 @@ resource "vsphere_virtual_machine" "main" {
     template_uuid = local.talos_ovf_url != "" ? null : data.vsphere_virtual_machine.template[0].id
   }
 
-    ovf_deploy {
-    remote_ovf_url = local.talos_ovf_url != "" ? local.talos_ovf_url : null
-    disk_provisioning  = (local.talos_ovf_url != "" ? (var.thin_provisioned == true ? "thin" : null) : null)
+  ovf_deploy {
+    remote_ovf_url    = local.talos_ovf_url != "" ? local.talos_ovf_url : null
+    disk_provisioning = (local.talos_ovf_url != "" ? (var.thin_provisioned == true ? "thin" : null) : null)
   }
 
   /* vapp {
