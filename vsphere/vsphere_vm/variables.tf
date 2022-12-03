@@ -101,3 +101,8 @@ variable "domain" {
   type        = string
   default     = "lab.tdeutsch.ch"
 }
+variable "ovf_url" {
+  description = "OVF URL"
+  type        = string
+  default     = ""
+}
