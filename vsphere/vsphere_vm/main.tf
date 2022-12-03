@@ -26,13 +26,13 @@ data "vsphere_network" "main" {
 }
 
 data "vsphere_host" "main" {
-  count         = local.var.ovf_url != "" ? 1 : 0
+  count         = var.ovf_url!= "" ? 1 : 0
   name          = var.vsphere_host
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
 
 data "vsphere_virtual_machine" "template" {
-  count         = local.var.ovf_url != "" ? 0 : 1
+  count         = var.ovf_url!= "" ? 0 : 1
   name          = var.template
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
@@ -47,7 +47,7 @@ resource "vsphere_virtual_machine" "main" {
   name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
   num_cpus = var.vCPU
   memory   = var.vMEM
-  guest_id = local.var.ovf_url != "" ? null : data.vsphere_virtual_machine.template[0].id
+  guest_id = var.ovf_url!= "" ? null : data.vsphere_virtual_machine.template[0].id
 
   cdrom {
     client_device = true
@@ -65,12 +65,12 @@ resource "vsphere_virtual_machine" "main" {
   }
 
   clone {
-    template_uuid = local.var.ovf_url != "" ? null : data.vsphere_virtual_machine.template[0].id
+    template_uuid = var.ovf_url!= "" ? null : data.vsphere_virtual_machine.template[0].id
   }
 
   ovf_deploy {
-    remote_ovf_url    = local.var.ovf_url != "" ? local.var.ovf_url : null
-    disk_provisioning = (local.var.ovf_url != "" ? (var.thin_provisioned == true ? "thin" : null) : null)
+    remote_ovf_url    = var.ovf_url!= "" ? var.ovf_url: null
+    disk_provisioning = (var.ovf_url!= "" ? (var.thin_provisioned == true ? "thin" : null) : null)
   }
 
   /* vapp {
