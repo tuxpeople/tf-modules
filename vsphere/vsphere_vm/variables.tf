@@ -106,3 +106,8 @@ variable "ovf_url" {
   type        = string
   default     = ""
 }
+variable "vsphere_host" {
+  description = "VSphere Host to deploy the VM on, needed if `ovf_url` is used."
+  type        = string
+  default     = ""
+}
