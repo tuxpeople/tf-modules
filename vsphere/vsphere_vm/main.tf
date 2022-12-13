@@ -1,7 +1,7 @@
 locals {
   user_data = var.user_data != "" ? var.user_data : "${path.module}/files/cloud-init-userdata.tftpl"
-  copylocal_count = var.ovf_url != "" ? var.instances_count : "0"
-  copyovf_count = var.ovf_url != "" ? "0" : var.instances_count
+  copylocal_count = var.ovf_url != "" ? "0" : var.instances_count
+  copyovf_count = var.ovf_url != "" ? var.instances_count : "0"
 }
 
 data "vsphere_datacenter" "main" {
