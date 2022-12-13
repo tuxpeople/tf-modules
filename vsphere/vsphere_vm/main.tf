@@ -49,7 +49,7 @@ resource "vsphere_virtual_machine" "local" {
   name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
   num_cpus = var.vCPU
   memory   = var.vMEM
-  guest_id = data.vsphere_virtual_machine.template[0].id
+  guest_id = data.vsphere_virtual_machine.template[count.index].guest_id
 
   cdrom {
     client_device = true
@@ -70,7 +70,7 @@ resource "vsphere_virtual_machine" "local" {
     template_uuid = data.vsphere_virtual_machine.template[0].id
   }
 
-  vapp {
+  /* vapp {
     properties = {
       user-data = base64encode(templatefile(local.user_data, ({
       pubkey          = file(pathexpand(var.ssh_public_keyfile))
@@ -84,7 +84,7 @@ resource "vsphere_virtual_machine" "local" {
       hostname        = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
       instance_id     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
     }
-  }
+  } */
 
   extra_config = {
     "guestinfo.metadata" = base64encode(templatefile("${path.module}/files/cloud-init-metadata.tftpl", ({
