@@ -1,5 +1,7 @@
 locals {
   user_data = var.user_data != "" ? var.user_data : "${path.module}/files/cloud-init-userdata.tftpl"
+  copylocal_count = var.ovf_url != "" ? var.instances_count : "0"
+  copyovf_count = var.ovf_url != "" ? "0" : var.instances_count
 }
 
 data "vsphere_datacenter" "main" {
@@ -26,19 +28,19 @@ data "vsphere_network" "main" {
 }
 
 data "vsphere_host" "main" {
-  count         = var.ovf_url != "" ? 1 : 0
+  count         = local.copyovf_count
   name          = var.vsphere_host
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
 
 data "vsphere_virtual_machine" "template" {
-  count         = var.ovf_url != "" ? 0 : 1
+  count         = local.copylocal_count
   name          = var.template
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
 
-resource "vsphere_virtual_machine" "main" {
-  count = var.instances_count
+resource "vsphere_virtual_machine" "local" {
+  count = local.copylocal_count
 
   resource_pool_id = data.vsphere_compute_cluster.main[count.index].resource_pool_id
   datastore_id     = data.vsphere_datastore.main[count.index].id
@@ -47,7 +49,7 @@ resource "vsphere_virtual_machine" "main" {
   name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
   num_cpus = var.vCPU
   memory   = var.vMEM
-  guest_id = var.ovf_url != "" ? null : data.vsphere_virtual_machine.template[0].id
+  guest_id = data.vsphere_virtual_machine.template[0].id
 
   cdrom {
     client_device = true
@@ -65,12 +67,109 @@ resource "vsphere_virtual_machine" "main" {
   }
 
   clone {
-    template_uuid = var.ovf_url != "" ? null : data.vsphere_virtual_machine.template[0].id
+    template_uuid = data.vsphere_virtual_machine.template[0].id
+  }
+
+  /* vapp {
+    properties = {
+      user-data = base64encode(templatefile(local.user_data, ({
+        pubkey      = file(pathexpand(var.ssh_public_keyfile))
+        hostname    = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+        instance_id = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      })))
+      hostname    = "${var.hostname}"
+      instance-id = "${var.hostname}"
+    }
+  } */
+
+  extra_config = {
+    "guestinfo.metadata" = base64encode(templatefile("${path.module}/files/cloud-init-metadata.tftpl", ({
+      fqdn        = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      hostname    = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      instance_id = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+    })))
+    "guestinfo.metadata.encoding" = "base64"
+    "guestinfo.userdata" = base64encode(templatefile(local.user_data, ({
+      pubkey          = file(pathexpand(var.ssh_public_keyfile))
+      guest_id        = var.guest_id
+      redhat_username = var.redhat_username
+      redhat_password = var.redhat_password
+      fqdn            = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      hostname        = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      instance_id     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+    })))
+    "guestinfo.userdata.encoding" = "base64"
+  }
+
+  wait_for_guest_net_routable = var.wait_for_guest_net_routable
+  wait_for_guest_net_timeout  = var.wait_for_guest_net_timeout
+
+  connection {
+    type        = "ssh"
+    user        = "ansible"
+    host        = self.default_ip_address
+    timeout     = "10m"
+    private_key = (var.ssh_private_keyfile == "" ? null : file(pathexpand(var.ssh_private_keyfile)))
+    agent       = false
+  }
+
+  provisioner "local-exec" {
+    command = "sleep 30"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo 'Waiting for user data script to finish'",
+      "cloud-init status --wait > /dev/null"
+    ]
+  }
+
+  /* provisioner "local-exec" {
+    command = "while ! nc -z ${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 22; do sleep 10; done; ssh -o StrictHostKeyChecking=no ansible@${(var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")} 'cloud-init status --wait > /dev/null'; sleep 20"
+  } */
+
+  provisioner "local-exec" {
+    command = "ssh-keygen -R ${self.default_ip_address}; ssh-keygen -R ${self.name}; ssh-keyscan -t rsa ${self.default_ip_address},${self.name} >> ~/.ssh/known_hosts"
+  }
+  lifecycle {
+    ignore_changes = [
+      disk[0].io_share_count,
+      disk[0].thin_provisioned,
+      disk[1].io_share_count,
+      disk[1].io_share_count
+    ]
+  }
+}
+
+resource "vsphere_virtual_machine" "ovf" {
+  count = local.copyovf_count
+
+  resource_pool_id = data.vsphere_compute_cluster.main[count.index].resource_pool_id
+  datastore_id     = data.vsphere_datastore.main[count.index].id
+  folder           = var.folder
+
+  name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+  num_cpus = var.vCPU
+  memory   = var.vMEM
+
+  cdrom {
+    client_device = true
+  }
+
+  network_interface {
+    network_id = data.vsphere_network.main[count.index].id
+  }
+
+  disk {
+    label            = "disk0"
+    size             = var.disksize
+    eagerly_scrub    = var.eagerly_scrub
+    thin_provisioned = var.thin_provisioned
   }
 
   ovf_deploy {
-    remote_ovf_url    = var.ovf_url != "" ? var.ovf_url : null
-    disk_provisioning = (var.ovf_url != "" ? (var.thin_provisioned == true ? "thin" : null) : null)
+    remote_ovf_url    = var.ovf_url
+    disk_provisioning = var.thin_provisioned == true ? "thin" : null
   }
 
   /* vapp {
