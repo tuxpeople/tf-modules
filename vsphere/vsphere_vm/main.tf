@@ -170,6 +170,7 @@ resource "vsphere_virtual_machine" "ovf" {
   ovf_deploy {
     remote_ovf_url    = var.ovf_url
     disk_provisioning = var.thin_provisioned == true ? "thin" : null
+    host_system_id = data.vsphere_host.main[count.index].id
   }
 
   /* vapp {
