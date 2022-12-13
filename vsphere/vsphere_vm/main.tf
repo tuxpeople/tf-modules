@@ -147,6 +147,7 @@ resource "vsphere_virtual_machine" "ovf" {
   resource_pool_id = data.vsphere_compute_cluster.main[count.index].resource_pool_id
   datastore_id     = data.vsphere_datastore.main[count.index].id
   folder           = var.folder
+    host_system_id = data.vsphere_host.main[count.index].id
 
   name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
   num_cpus = var.vCPU
@@ -170,7 +171,6 @@ resource "vsphere_virtual_machine" "ovf" {
   ovf_deploy {
     remote_ovf_url    = var.ovf_url
     disk_provisioning = var.thin_provisioned == true ? "thin" : null
-    host_system_id = data.vsphere_host.main[count.index].id
   }
 
   /* vapp {
