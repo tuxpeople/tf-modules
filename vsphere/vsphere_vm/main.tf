@@ -99,6 +99,16 @@ resource "vsphere_virtual_machine" "local" {
       instance_id     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
     })))
     "guestinfo.userdata.encoding" = "base64"
+    "guestinfo.user-data" = base64encode(templatefile(local.user_data, ({
+      pubkey          = file(pathexpand(var.ssh_public_keyfile))
+      guest_id        = var.guest_id
+      redhat_username = var.redhat_username
+      redhat_password = var.redhat_password
+      fqdn            = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      hostname        = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      instance_id     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+    })))
+    "guestinfo.user-data.encoding" = "base64"
   }
 
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
@@ -203,6 +213,16 @@ datacenter_id = data.vsphere_datacenter.main[count.index].id
       instance_id     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
     })))
     "guestinfo.userdata.encoding" = "base64"
+    "guestinfo.user-data" = base64encode(templatefile(local.user_data, ({
+      pubkey          = file(pathexpand(var.ssh_public_keyfile))
+      guest_id        = var.guest_id
+      redhat_username = var.redhat_username
+      redhat_password = var.redhat_password
+      fqdn            = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      hostname        = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+      instance_id     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
+    })))
+    "guestinfo.user-data.encoding" = "base64"
   }
 
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
