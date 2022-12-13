@@ -148,7 +148,7 @@ resource "vsphere_virtual_machine" "ovf" {
   datastore_id     = data.vsphere_datastore.main[count.index].id
   folder           = var.folder
     host_system_id = data.vsphere_host.main[count.index].id
-datacenter_id = data.datacenter.main[count.index].id
+datacenter_id = data.vsphere_datacenter.main[count.index].id
 
   name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
   num_cpus = var.vCPU
