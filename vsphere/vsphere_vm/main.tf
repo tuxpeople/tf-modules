@@ -57,6 +57,8 @@ resource "vsphere_virtual_machine" "local" {
 
   network_interface {
     network_id = data.vsphere_network.main[count.index].id
+    use_static_mac = var.mac_address[count.index] != "" ? true : false
+    mac_address = var.mac_address[count.index] != "" ? var.mac_address[count.index] : null
   }
 
   disk {
