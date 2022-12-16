@@ -108,7 +108,7 @@ variable "ovf_url" {
 }
 variable "mac_address" {
   description = "MAC Adresses vor the VMSL"
-  type        = list
+  type        = list(any)
   default     = ""
 }
 variable "vsphere_host" {

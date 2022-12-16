@@ -1,7 +1,7 @@
 locals {
-  user_data = var.user_data != "" ? var.user_data : "${path.module}/files/cloud-init-userdata.tftpl"
+  user_data       = var.user_data != "" ? var.user_data : "${path.module}/files/cloud-init-userdata.tftpl"
   copylocal_count = var.ovf_url != "" ? "0" : var.instances_count
-  copyovf_count = var.ovf_url != "" ? var.instances_count : "0"
+  copyovf_count   = var.ovf_url != "" ? var.instances_count : "0"
 }
 
 data "vsphere_datacenter" "main" {
@@ -56,9 +56,9 @@ resource "vsphere_virtual_machine" "local" {
   }
 
   network_interface {
-    network_id = data.vsphere_network.main[count.index].id
+    network_id     = data.vsphere_network.main[count.index].id
     use_static_mac = var.mac_address[count.index] != "" ? true : false
-    mac_address = var.mac_address[count.index] != "" ? var.mac_address[count.index] : null
+    mac_address    = var.mac_address[count.index] != "" ? var.mac_address[count.index] : null
   }
 
   disk {
@@ -163,8 +163,8 @@ resource "vsphere_virtual_machine" "ovf" {
   resource_pool_id = data.vsphere_compute_cluster.main[count.index].resource_pool_id
   datastore_id     = data.vsphere_datastore.main[count.index].id
   folder           = var.folder
-    host_system_id = data.vsphere_host.main[count.index].id
-datacenter_id = data.vsphere_datacenter.main[count.index].id
+  host_system_id   = data.vsphere_host.main[count.index].id
+  datacenter_id    = data.vsphere_datacenter.main[count.index].id
 
   name     = (var.instances_count == "1" ? "${var.hostname}" : "${format("${var.hostname}%02s", (count.index + 1))}")
   num_cpus = var.vCPU
