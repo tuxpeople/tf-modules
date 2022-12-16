@@ -109,7 +109,7 @@ variable "ovf_url" {
 variable "mac_address" {
   description = "MAC Adresses vor the VMSL"
   type        = list(any)
-  default     = ""
+  default     = [""]
 }
 variable "vsphere_host" {
   description = "VSphere Host to deploy the VM on, needed if `ovf_url` is used."
