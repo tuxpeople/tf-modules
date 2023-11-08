@@ -193,6 +193,13 @@ variable "linux_distribution_list" {
       version   = "latest"
     },
 
+    ubuntu2204-gen2 = {
+      publisher = "Canonical"
+      offer     = "0001-com-ubuntu-server-jammy-daily"
+      sku       = "22_04-daily-lts-gen2"
+      version   = "latest"
+    },
+
     centos77 = {
       publisher = "OpenLogic"
       offer     = "CentOS"
