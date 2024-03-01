@@ -36,7 +36,7 @@ variable "datastore" {
 variable "network" {
   description = "Network which the VM should be connected to (must exist)"
   type        = string
-  default = "DVPG-VM Network"
+  default     = "DVPG-VM Network"
 }
 variable "template" {
   description = "Which template to clone. (Defaults to: linux-ubuntu-server-22-04-lts)"
