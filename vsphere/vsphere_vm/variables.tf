@@ -36,6 +36,7 @@ variable "datastore" {
 variable "network" {
   description = "Network which the VM should be connected to (must exist)"
   type        = string
+  default = "DVPG-VM Network"
 }
 variable "template" {
   description = "Which template to clone. (Defaults to: linux-ubuntu-server-22-04-lts)"
@@ -45,7 +46,7 @@ variable "template" {
 variable "cluster" {
   description = "Cluster where the VMs should be placed (Defaults to: Homelab)"
   type        = string
-  default     = "Homelab"
+  default     = "homelab-cluster"
 }
 variable "datacenter" {
   description = "Datacenter where the VMs should be placed (Defaults to: SKY)"
@@ -107,7 +108,7 @@ variable "ovf_url" {
   default     = ""
 }
 variable "mac_address" {
-  description = "MAC Adresses vor the VMSL"
+  description = "MAC Adresses for the VMSL"
   type        = list(any)
   default     = [""]
 }

@@ -38,8 +38,8 @@ users:
     shell: /bin/bash
 
 runcmd:
-  # - sudo dhclient -r
-  # - sudo dhclient
+  - sudo dhclient -r
+  - sudo dhclient
   - command -v dhclient >/dev/null 2>&1 && { echo renew; dhclient -r; dhclient; }
   - command -v dhcpcd >/dev/null 2>&1 && { echo renew; dhcpcd -k; dhcpcd -n; }
   - sudo eject
