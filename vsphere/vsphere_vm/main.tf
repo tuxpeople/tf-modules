@@ -39,6 +39,19 @@ data "vsphere_virtual_machine" "template" {
   datacenter_id = data.vsphere_datacenter.main[count.index].id
 }
 
+data "vsphere_tag_category" "category" {
+  count      = var.tags != null ? length(var.tags) : 0
+  name       = keys(var.tags)[count.index]
+  depends_on = [var.tag_depends_on]
+}
+
+data "vsphere_tag" "tag" {
+  count       = var.tags != null ? length(var.tags) : 0
+  name        = var.tags[keys(var.tags)[count.index]]
+  category_id = data.vsphere_tag_category.category[count.index].id
+  depends_on  = [var.tag_depends_on]
+}
+
 resource "vsphere_virtual_machine" "local" {
   count = local.copylocal_count
 
@@ -50,7 +63,7 @@ resource "vsphere_virtual_machine" "local" {
   num_cpus = var.vCPU
   memory   = var.vMEM
   guest_id = data.vsphere_virtual_machine.template[count.index].guest_id
-  tags     = var.tags
+  tags     = var.tag_ids != null ? var.tag_ids : data.vsphere_tag.tag[*].id
 
   cdrom {
     client_device = true
