@@ -49,7 +49,9 @@ No modules.
 | <a name="input_redhat_username"></a> [redhat\_username](#input\_redhat\_username) | Username to subscribe a RHEL system to RedHat (used when guest\_id == rhel8\_64Guest) | `string` | `""` | no |
 | <a name="input_ssh_private_keyfile"></a> [ssh\_private\_keyfile](#input\_ssh\_private\_keyfile) | SSH private keyfile for the VMs (Default: ~/.ssh/id\_rsa) | `string` | `"~/.ssh/id_rsa"` | no |
 | <a name="input_ssh_public_keyfile"></a> [ssh\_public\_keyfile](#input\_ssh\_public\_keyfile) | SSH public keyfile for the VMs (Default: ~/.ssh/id\_rsa.pub) | `string` | `"~/.ssh/id_rsa.pub"` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | EXISTING vsphere tags to add to the vm | `set(any)` | `null` | no |
+| <a name="input_tag_depends_on"></a> [tag\_depends\_on](#input\_tag\_depends\_on) | Add any external depend on module here like tag\_depends\_on = [vsphere\_tag.foo.id]. | `any` | `null` | no |
+| <a name="input_tag_ids"></a> [tag\_ids](#input\_tag\_ids) | The ids of any tags to attach to this resource. They must already exist. | `list(any)` | `null` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | The names of any tags to attach to this resource. They must already exist. | `map(any)` | `null` | no |
 | <a name="input_template"></a> [template](#input\_template) | Which template to clone. (Defaults to: linux-ubuntu-server-22-04-lts) | `string` | `"linux-ubuntu-server-22-04-lts"` | no |
 | <a name="input_thin_provisioned"></a> [thin\_provisioned](#input\_thin\_provisioned) | Thinprovision the disk (Defaults to: true) | `bool` | `true` | no |
 | <a name="input_user_data"></a> [user\_data](#input\_user\_data) | Supply a special cloud-init file. If empty, the module's default will be used. | `string` | `""` | no |
