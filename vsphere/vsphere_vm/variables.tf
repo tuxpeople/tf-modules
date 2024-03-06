@@ -113,8 +113,18 @@ variable "mac_address" {
   default     = [""]
 }
 variable "tags" {
-  description = "EXISTING vsphere tags to add to the vm"
-  type        = set(any)
+  description = "The names of any tags to attach to this resource. They must already exist."
+  type        = map(any)
+  default     = null
+}
+variable "tag_ids" {
+  description = "The ids of any tags to attach to this resource. They must already exist."
+  type        = list(any)
+  default     = null
+}
+variable "tag_depends_on" {
+  description = "Add any external depend on module here like tag_depends_on = [vsphere_tag.foo.id]."
+  type        = any
   default     = null
 }
 variable "vsphere_host" {
