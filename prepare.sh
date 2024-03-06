@@ -2,8 +2,8 @@
 
 ROOT_DIR=$(git rev-parse --show-toplevel)
 
-for platform in $(find "${ROOT_DIR}"  -type d -mindepth 1 -maxdepth 1 -not -path '*/\.git/*'); do
-    for module in $(find "${platform}"  -type d -mindepth 1 -maxdepth 1 -not -path '*/\.git/*'); do
+for platform in $(find "${ROOT_DIR}"  -type d -mindepth 1 -maxdepth 1 -not -path '*.git*'); do
+    for module in $(find "${platform}"  -type d -mindepth 1 -maxdepth 1 -not -path '*.git*'); do
         cd "${module}"
         echo "Working on ${module}"
         echo "Formating Terraform"
