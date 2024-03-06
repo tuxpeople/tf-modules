@@ -50,7 +50,7 @@ resource "vsphere_virtual_machine" "local" {
   num_cpus = var.vCPU
   memory   = var.vMEM
   guest_id = data.vsphere_virtual_machine.template[count.index].guest_id
-  tags     = var.tags != "" ? var.tags : null
+  tags     = var.tags
 
   cdrom {
     client_device = true

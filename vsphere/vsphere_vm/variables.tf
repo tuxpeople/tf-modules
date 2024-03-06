@@ -114,8 +114,8 @@ variable "mac_address" {
 }
 variable "tags" {
   description = "EXISTING vsphere tags to add to the vm"
-  type        = map(any)
-  default     = ""
+  type        = set(any)
+  default     = [""]
 }
 variable "vsphere_host" {
   description = "VSphere Host to deploy the VM on, needed if `ovf_url` is used."
