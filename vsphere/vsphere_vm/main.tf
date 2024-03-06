@@ -152,7 +152,9 @@ resource "vsphere_virtual_machine" "local" {
       disk[0].io_share_count,
       disk[0].thin_provisioned,
       disk[1].io_share_count,
-      disk[1].io_share_count
+      disk[1].io_share_count,
+      hv_mode,
+      ept_rvi_mode
     ]
   }
 }
