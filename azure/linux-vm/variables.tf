@@ -200,6 +200,13 @@ variable "linux_distribution_list" {
       version   = "latest"
     },
 
+    ubuntu2404 = {
+      publisher = "Canonical"
+      offer     = "ubuntu-24_04-lts"
+      sku       = "server"
+      version   = "latest"
+    },
+
     centos77 = {
       publisher = "OpenLogic"
       offer     = "CentOS"
