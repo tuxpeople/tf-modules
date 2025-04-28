@@ -9,7 +9,6 @@ locals {
     }
   )
   dns_file = "/mnt/data/dns.d/${random_pet.pet.id}.dns"
-  expanded_sshkey_path = pathexpand(var.sshkey)
 }
 
 resource "random_pet" "pet" {
@@ -31,7 +30,7 @@ resource "null_resource" "copy-dns" {
     connection {
       type        = "ssh"
       user        = var.sshuser
-      private_key = file(local.expanded_sshkey_path)
+      private_key = file(pathexpand("${var.sshkey}"))
       host        = var.dnsserver
     }
   }
