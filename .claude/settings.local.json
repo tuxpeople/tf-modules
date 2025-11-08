@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Volumes/terraform/tf-proxmox/modules/proxmox_virtualmachine/**)",
+      "Read(//tmp/Proxmox-Home-Lab/terraform/core/**)",
+      "Read(//private/tmp/Proxmox-Home-Lab/terraform/core/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

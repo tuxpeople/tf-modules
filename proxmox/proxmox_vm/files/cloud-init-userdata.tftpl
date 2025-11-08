@@ -1,0 +1,37 @@
+#cloud-config
+hostname: ${hostname}
+instance-id: ${instance_id}
+fqdn: ${fqdn}
+
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
+
+growpart:
+  mode: auto
+  devices: ["/"]
+  ignore_growroot_disabled: false
+
+package_upgrade: true
+packages:
+  - qemu-guest-agent
+  - sudo
+  - python3
+
+users:
+  - name: ansible
+    ssh_authorized_keys:
+      - ${pubkey}
+    ssh_import_id:
+      - gh:tuxpeople
+    lock_passwd: true
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: [adm]
+    shell: /bin/bash
+
+runcmd:
+  - sudo dhclient -r
+  - sudo dhclient
+  - command -v dhclient >/dev/null 2>&1 && { echo renew; dhclient -r; dhclient; }
+  - command -v dhcpcd >/dev/null 2>&1 && { echo renew; dhcpcd -k; dhcpcd -n; }
+  - sudo systemctl enable qemu-guest-agent
+  - sudo systemctl start qemu-guest-agent
+  - command -v apt >/dev/null 2>&1 && { sudo apt -y install acl; }

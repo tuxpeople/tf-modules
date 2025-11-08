@@ -1,0 +1,44 @@
+# Proxmox Connection Settings
+proxmox_endpoint = "https://your-proxmox-server:8006/api2/json"
+proxmox_username = "terraform@pve"
+proxmox_password = "your-password"
+proxmox_insecure = true  # Set to false in production with valid certificates
+
+# SSH Settings (required for cloud-init file upload)
+proxmox_ssh_username    = "root"
+proxmox_ssh_private_key = "~/.ssh/id_rsa"
+
+# VM Configuration
+instances_count = 1
+hostname        = "test-vm"
+node_name       = "pve"  # Replace with your Proxmox node name
+
+# Resource Allocation
+vcpu     = 2
+vmem     = 2048  # Memory in MB
+disksize = 20    # Disk size in GB
+
+# Storage and Network
+datastore_id          = "local-lvm"  # Replace with your datastore for VM disks
+snippets_datastore_id = "local"     # Datastore for cloud-init files (must support file storage)
+network_bridge        = "vmbr0"     # Replace with your network bridge
+template              = ""          # Template ID to clone from (e.g., "9000")
+iso_file              = ""          # ISO file for installation (e.g., "local:iso/ubuntu-22.04-server-amd64.iso")
+
+# OS Configuration
+distro               = "ubuntu"    # Supported: ubuntu, rocky, debian, centos, fedora
+enable_vendor_config = true       # Enable distro-specific vendor config
+
+# Network Configuration
+domain = "lab.tdeutsch.ch"
+# For DHCP, leave ip_addresses as [""]
+# For static IP: ip_addresses = ["192.168.1.100/24"]
+ip_addresses = [""]
+gateway      = ""             # Set if using static IP
+dns_servers  = ["8.8.8.8", "8.8.4.4"]
+
+# SSH Configuration
+ssh_public_keyfile = "~/.ssh/id_rsa.pub"
+
+# Tags
+tags = ["terraform", "test"]
