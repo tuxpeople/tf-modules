@@ -40,10 +40,10 @@ module "test_vm" {
   distro               = var.distro
   enable_vendor_config = var.enable_vendor_config
 
-  domain           = var.domain
-  ip_addresses     = var.ip_addresses
-  gateway          = var.gateway
-  dns_servers      = var.dns_servers
+  domain       = var.domain
+  ip_addresses = var.ip_addresses
+  gateway      = var.gateway
+  dns_servers  = var.dns_servers
 
   ssh_public_keyfile = var.ssh_public_keyfile
 
