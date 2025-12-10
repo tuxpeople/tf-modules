@@ -9,9 +9,10 @@ locals {
 
   network_device_final = merge(local.network_device_base, local.network_device_mac)
 
-  use_external_user_data   = length(var.external_user_data_file_ids) >= var.instances_count && length(compact(slice(var.external_user_data_file_ids, 0, min(var.instances_count, length(var.external_user_data_file_ids))))) == var.instances_count
-  use_external_meta_data   = length(var.external_meta_data_file_ids) >= var.instances_count && length(compact(slice(var.external_meta_data_file_ids, 0, min(var.instances_count, length(var.external_meta_data_file_ids))))) == var.instances_count
-  use_external_vendor_data = length(var.external_vendor_data_file_ids) >= var.instances_count && length(compact(slice(var.external_vendor_data_file_ids, 0, min(var.instances_count, length(var.external_vendor_data_file_ids))))) == var.instances_count
+  # Length checks only; individual IDs may be unknown during planning when sourced from other modules
+  use_external_user_data   = length(var.external_user_data_file_ids) >= var.instances_count
+  use_external_meta_data   = length(var.external_meta_data_file_ids) >= var.instances_count
+  use_external_vendor_data = length(var.external_vendor_data_file_ids) >= var.instances_count
 
   create_user_data_files   = !local.use_external_user_data
   create_meta_data_files   = !local.use_external_meta_data
