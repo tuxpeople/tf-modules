@@ -231,7 +231,7 @@ resource "null_resource" "cloudinit_wait" {
   }
 
   provisioner "local-exec" {
-    command = format(
+    command = self.triggers.host != "" ? format(
       "%s %q %q %q %d %d",
       local.cloud_init_wait_script,
       self.triggers.host,
@@ -239,7 +239,7 @@ resource "null_resource" "cloudinit_wait" {
       local.cloud_init_wait_config.ssh_private_key,
       local.cloud_init_wait_config.reboot_delay,
       local.cloud_init_wait_config.timeout,
-    )
+    ) : "echo 'Skipping cloud-init wait: host IP not available'"
   }
 
   depends_on = [proxmox_virtual_environment_vm.main]
